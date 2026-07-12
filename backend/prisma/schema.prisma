@@ -124,6 +124,7 @@ model MateriaCupof {
   horas_catedra  Int?
   id_orientacion Int?
   codigo_pid     String? @db.VarChar(50)
+  activo         Boolean @default(true)
 
   orientacion   Orientacion?  @relation(fields: [id_orientacion], references: [id_orientacion])
   designaciones Designacion[]

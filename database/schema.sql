@@ -74,7 +74,7 @@ CREATE TABLE alumnos (
     lugar_nacimiento VARCHAR(120),
     nacionalidad VARCHAR(80),
     primaria_origen VARCHAR(150),
-    secundario_incomplete VARCHAR(150),
+    secundario_incompleto VARCHAR(150),
     analitico_parcial BOOLEAN DEFAULT FALSE,
     id_estado INTEGER REFERENCES estado_alumnos(id_estado),
     id_motivo_baja INTEGER REFERENCES motivo_baja_alumnos(id_motivo_baja)
@@ -89,6 +89,7 @@ CREATE TABLE materias_cupof (
     horas_catedra INTEGER,
     id_orientacion INTEGER REFERENCES orientaciones(id_orientacion),
     codigo_pid VARCHAR(50)
+    activo BOOLEAN DEFAULT TRUE
 );
 
 -- ===========================================================================
