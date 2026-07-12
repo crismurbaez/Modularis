@@ -18,12 +18,13 @@ const teachers_module_1 = require("./teachers/teachers.module");
 const academics_module_1 = require("./academics/academics.module");
 const assignments_module_1 = require("./assignments/assignments.module");
 const grades_module_1 = require("./grades/grades.module");
+const users_module_1 = require("./users/users.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [crypto_module_1.CryptoModule, prisma_module_1.PrismaModule, auth_module_1.AuthModule, students_module_1.StudentsModule, teachers_module_1.TeachersModule, academics_module_1.AcademicsModule, assignments_module_1.AssignmentsModule, grades_module_1.GradesModule],
+        imports: [crypto_module_1.CryptoModule, prisma_module_1.PrismaModule, auth_module_1.AuthModule, users_module_1.UsersModule, students_module_1.StudentsModule, teachers_module_1.TeachersModule, academics_module_1.AcademicsModule, assignments_module_1.AssignmentsModule, grades_module_1.GradesModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })

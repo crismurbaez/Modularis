@@ -24,6 +24,7 @@ async function bootstrap() {
     .setTitle('Modularis API')
     .setDescription('API para el Sistema de Gestión Escolar (Contexto de Encierro - CENS)')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
