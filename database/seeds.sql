@@ -20,7 +20,7 @@ INSERT INTO rol_permisos (id_rol, id_permiso) VALUES
 
 -- Hash de la contraseña '123456' generado por bcrypt (ejemplo con salt 10)
 INSERT INTO usuarios (dni, password_hash, nombre, apellido, id_rol, activo) VALUES
-('00000000', '$2b$10$EpN10t5T0hOQ/e.k.hO3.u6zX2L4e.rC.q6i/Xw4qP4Mv0Q.O/R6m', 'Admin', 'Sistema', 1, TRUE);
+('00000000', '$2b$10$EpN10t5T0hOQ/e.k.hO3.u6zX2L4e.rC.q6i/Xw4qP4Mv0Q.O/R6m', 'Yanina', 'Poncela', 1, TRUE);
 
 -- ===========================================================================
 -- SEEDS PARA MODULARIS (Catálogos Oficiales de PBA)

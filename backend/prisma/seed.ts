@@ -13,7 +13,7 @@ async function main() {
   // =====================================================================
   // 0. SISTEMA DE ROLES Y PERMISOS (RBAC)
   // =====================================================================
-  
+
   await prisma.rol.createMany({
     data: [
       { id_rol: 1, nombre: 'DIRECTOR', descripcion: 'Control total del sistema' },
@@ -44,15 +44,18 @@ async function main() {
 
   // Hash de la contraseña '123456' para el usuario inicial
   const passwordHash = await bcrypt.hash('123456', 10);
-  
+
   await prisma.usuario.upsert({
     where: { dni: '00000000' },
-    update: {},
+    update: {
+      nombre: 'Yanina',
+      apellido: 'Poncela',
+    },
     create: {
       dni: '00000000',
       password_hash: passwordHash,
-      nombre: 'Admin',
-      apellido: 'Sistema',
+      nombre: 'Yanina',
+      apellido: 'Poncela',
       id_rol: 1, // Rol Director
       activo: true,
     },
