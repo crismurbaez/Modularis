@@ -1,4 +1,28 @@
 -- ===========================================================================
+-- 0. SISTEMA DE ROLES Y PERMISOS (RBAC)
+-- ===========================================================================
+
+INSERT INTO roles (nombre, descripcion) VALUES
+('DIRECTOR', 'Control total del sistema'),
+('PRECEPTOR', 'Gestión de asistencia y alumnos'),
+('PROFESOR', 'Carga de calificaciones');
+
+INSERT INTO permisos (codigo, modulo, descripcion) VALUES
+('ACCESO_TOTAL', 'SISTEMA', 'Permiso maestro que ignora las restricciones'),
+('MODIFICAR_CALIFICACIONES', 'ACADEMICO', 'Permite cargar o editar notas'),
+('MODIFICAR_ASISTENCIA', 'ASISTENCIA', 'Permite cargar o editar faltas'),
+('GESTIONAR_USUARIOS', 'CONFIGURACION', 'Permite crear o modificar usuarios');
+
+INSERT INTO rol_permisos (id_rol, id_permiso) VALUES
+(1, 1), -- Director -> Acceso Total
+(2, 3), -- Preceptor -> Modificar Asistencia
+(3, 2); -- Profesor -> Modificar Calificaciones
+
+-- Hash de la contraseña '123456' generado por bcrypt (ejemplo con salt 10)
+INSERT INTO usuarios (dni, password_hash, nombre, apellido, id_rol, activo) VALUES
+('00000000', '$2b$10$EpN10t5T0hOQ/e.k.hO3.u6zX2L4e.rC.q6i/Xw4qP4Mv0Q.O/R6m', 'Admin', 'Sistema', 1, TRUE);
+
+-- ===========================================================================
 -- SEEDS PARA MODULARIS (Catálogos Oficiales de PBA)
 -- ===========================================================================
 

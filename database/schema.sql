@@ -44,6 +44,40 @@ CREATE TABLE limites_calificacion_docentes (
 );
 
 -- ===========================================================================
+-- 1.5. SISTEMA DE ROLES Y PERMISOS (RBAC)
+-- ===========================================================================
+
+CREATE TABLE roles (
+    id_rol SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE,
+    descripcion VARCHAR(200)
+);
+
+CREATE TABLE permisos (
+    id_permiso SERIAL PRIMARY KEY,
+    codigo VARCHAR(100) NOT NULL UNIQUE,
+    modulo VARCHAR(100) NOT NULL,
+    descripcion VARCHAR(200)
+);
+
+CREATE TABLE rol_permisos (
+    id_rol INTEGER REFERENCES roles(id_rol) ON DELETE CASCADE,
+    id_permiso INTEGER REFERENCES permisos(id_permiso) ON DELETE CASCADE,
+    PRIMARY KEY (id_rol, id_permiso)
+);
+
+CREATE TABLE usuarios (
+    id_usuario SERIAL PRIMARY KEY,
+    dni VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    nombre VARCHAR(150),
+    apellido VARCHAR(150),
+    id_rol INTEGER NOT NULL REFERENCES roles(id_rol),
+    id_profesor INTEGER, -- FK opcional, se agrega abajo tras crear 'profesores'
+    activo BOOLEAN DEFAULT TRUE
+);
+
+-- ===========================================================================
 -- 2. ENTIDADES PRINCIPALES
 -- ===========================================================================
 
@@ -64,6 +98,13 @@ CREATE TABLE profesores (
     titulo_docente BOOLEAN DEFAULT FALSE,
     activo BOOLEAN DEFAULT TRUE
 );
+
+-- Agregar foreign key de usuario a profesor (Circular dependency resolution)
+ALTER TABLE usuarios
+    ADD CONSTRAINT fk_usuario_profesor
+    FOREIGN KEY (id_profesor)
+    REFERENCES profesores(id_profesor)
+    ON DELETE SET NULL;
 
 CREATE TABLE alumnos (
     id_alumno SERIAL PRIMARY KEY,

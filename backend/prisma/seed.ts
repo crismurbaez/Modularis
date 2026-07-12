@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import 'dotenv/config';
+import * as bcrypt from 'bcrypt';
 
 const connectionString = `${process.env.DATABASE_URL}`;
 const pool = new Pool({ connectionString });
@@ -9,6 +10,54 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  // =====================================================================
+  // 0. SISTEMA DE ROLES Y PERMISOS (RBAC)
+  // =====================================================================
+  
+  await prisma.rol.createMany({
+    data: [
+      { id_rol: 1, nombre: 'DIRECTOR', descripcion: 'Control total del sistema' },
+      { id_rol: 2, nombre: 'PRECEPTOR', descripcion: 'Gestión de asistencia y alumnos' },
+      { id_rol: 3, nombre: 'PROFESOR', descripcion: 'Carga de calificaciones' },
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.permiso.createMany({
+    data: [
+      { id_permiso: 1, codigo: 'ACCESO_TOTAL', modulo: 'SISTEMA', descripcion: 'Permiso maestro que ignora las restricciones' },
+      { id_permiso: 2, codigo: 'MODIFICAR_CALIFICACIONES', modulo: 'ACADEMICO', descripcion: 'Permite cargar o editar notas' },
+      { id_permiso: 3, codigo: 'MODIFICAR_ASISTENCIA', modulo: 'ASISTENCIA', descripcion: 'Permite cargar o editar faltas' },
+      { id_permiso: 4, codigo: 'GESTIONAR_USUARIOS', modulo: 'CONFIGURACION', descripcion: 'Permite crear o modificar usuarios' },
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.rolPermiso.createMany({
+    data: [
+      { id_rol: 1, id_permiso: 1 }, // Director -> Acceso Total
+      { id_rol: 2, id_permiso: 3 }, // Preceptor -> Modificar Asistencia
+      { id_rol: 3, id_permiso: 2 }, // Profesor -> Modificar Calificaciones
+    ],
+    skipDuplicates: true,
+  });
+
+  // Hash de la contraseña '123456' para el usuario inicial
+  const passwordHash = await bcrypt.hash('123456', 10);
+  
+  await prisma.usuario.upsert({
+    where: { dni: '00000000' },
+    update: {},
+    create: {
+      dni: '00000000',
+      password_hash: passwordHash,
+      nombre: 'Admin',
+      apellido: 'Sistema',
+      id_rol: 1, // Rol Director
+      activo: true,
+    },
+  });
+
   // 1. Orientaciones Oficiales de CENS
   await prisma.orientacion.createMany({
     data: [
