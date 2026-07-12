@@ -1,0 +1,185 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Orientacion {
+  id_orientacion Int     @id @default(autoincrement())
+  nombre         String  @db.VarChar(100)
+  detalle        String? @db.VarChar(200)
+
+  materias_cupof MateriaCupof[]
+
+  @@map("orientaciones")
+}
+
+model CursoSeccion {
+  id_curso_seccion Int     @id @default(autoincrement())
+  nombre           String  @db.VarChar(100)
+  detalle          String? @db.VarChar(200)
+
+  @@map("curso_seccion")
+}
+
+model SituacionRevistaDocente {
+  id_situacion_revista Int     @id @default(autoincrement())
+  nombre               String  @db.VarChar(100)
+  detalle              String? @db.VarChar(200)
+
+  designaciones Designacion[]
+
+  @@map("situacion_revista_docentes")
+}
+
+model EstadoAlumno {
+  id_estado Int     @id @default(autoincrement())
+  nombre    String  @db.VarChar(100)
+  detalle   String? @db.VarChar(200)
+
+  alumnos Alumno[]
+
+  @@map("estado_alumnos")
+}
+
+model MotivoBajaAlumno {
+  id_motivo_baja Int     @id @default(autoincrement())
+  nombre         String  @db.VarChar(100)
+  detalle        String? @db.VarChar(200)
+
+  alumnos Alumno[]
+
+  @@map("motivo_baja_alumnos")
+}
+
+model LimitesCalificacionAlumnos {
+  limite_superior Int
+  limite_inferior Int
+
+  @@unique([limite_superior, limite_inferior])
+  @@map("limites_calificacion_alumnos")
+}
+
+model LimitesCalificacionDocentes {
+  limite_superior Int
+  limite_inferior Int
+
+  @@unique([limite_superior, limite_inferior])
+  @@map("limites_calificacion_docentes")
+}
+
+model Profesor {
+  id_profesor       Int       @id @default(autoincrement())
+  dni               String    @unique @db.VarChar(255) // Increased length for encryption
+  nombre            String    @db.VarChar(255) // Increased length for encryption
+  apellido          String    @db.VarChar(255) // Increased length for encryption
+  cuil              String    @db.VarChar(20)
+  fecha_nacimiento  DateTime? @db.Date
+  direccion         String?   @db.VarChar(200)
+  localidad         String?   @db.VarChar(100)
+  distrito          String?   @db.VarChar(100)
+  mail_abc          String?   @db.VarChar(120)
+  mail_personal     String?   @db.VarChar(120)
+  telefono          String?   @db.VarChar(30)
+  titulo_habilitante String?  @db.VarChar(150)
+  titulo_docente    Boolean?  @default(false)
+
+  designaciones          Designacion[]
+  inasistencias_docentes InasistenciaDocente[]
+
+  @@map("profesores")
+}
+
+model Alumno {
+  id_alumno             Int       @id @default(autoincrement())
+  dni                   String    @unique @db.VarChar(255) // Increased length for encryption
+  nombre                String    @db.VarChar(255) // Increased length for encryption
+  apellido              String    @db.VarChar(255) // Increased length for encryption
+  fecha_nacimiento      DateTime? @db.Date
+  edad                  Int?
+  lugar_nacimiento      String?   @db.VarChar(120)
+  nacionalidad          String?   @db.VarChar(80)
+  primaria_origen       String?   @db.VarChar(150)
+  secundario_incompleto String?   @db.VarChar(150) // User modification respected
+  analitico_parcial     Boolean?  @default(false)
+
+  id_estado      Int?
+  id_motivo_baja Int?
+
+  estado      EstadoAlumno?     @relation(fields: [id_estado], references: [id_estado])
+  motivo_baja MotivoBajaAlumno? @relation(fields: [id_motivo_baja], references: [id_motivo_baja])
+  cursadas    CursadaNota[]
+
+  @@map("alumnos")
+}
+
+model MateriaCupof {
+  cupof          String  @id @db.VarChar(50)
+  materia_nombre String  @db.VarChar(150)
+  area           String? @db.VarChar(100)
+  modulo         String? @db.VarChar(50)
+  ano            Int?    @map("año")
+  horas_catedra  Int?
+  id_orientacion Int?
+  codigo_pid     String? @db.VarChar(50)
+
+  orientacion   Orientacion?  @relation(fields: [id_orientacion], references: [id_orientacion])
+  designaciones Designacion[]
+  cursadas      CursadaNota[]
+
+  @@map("materias_cupof")
+}
+
+model Designacion {
+  id_designacion            Int       @id @default(autoincrement())
+  id_profesor               Int
+  cupof                     String    @db.VarChar(50)
+  curso_seccion             String?   @db.VarChar(50)
+  fecha_posesion            DateTime? @db.Date
+  fecha_cese                DateTime? @db.Date
+  id_situacion_revista      Int?
+  cuil_profesor_reemplazado String?   @db.VarChar(20)
+  nota_desempeno            Decimal?  @map("nota_desempeño") @db.Decimal(4, 2)
+  fundamentacion_baja_nota  String?   @db.Text // Added based on business rules
+
+  profesor          Profesor                 @relation(fields: [id_profesor], references: [id_profesor], onDelete: Cascade)
+  materia           MateriaCupof             @relation(fields: [cupof], references: [cupof], onDelete: Cascade)
+  situacion_revista SituacionRevistaDocente? @relation(fields: [id_situacion_revista], references: [id_situacion_revista])
+
+  @@map("designaciones")
+}
+
+model CursadaNota {
+  id_cursada        Int     @id @default(autoincrement())
+  id_alumno         Int
+  cupof             String  @db.VarChar(50)
+  ciclo_lectivo     Int
+  nota_cuat1        String? @db.VarChar(15)
+  faltas_cuat1      Int?    @default(0)
+  nota_cuat2        String? @db.VarChar(15)
+  faltas_cuat2      Int?    @default(0)
+  condicion_materia String? @db.VarChar(80)
+  mes_acreditacion  String? @db.VarChar(30)
+  anio_acreditacion Int?
+
+  alumno  Alumno       @relation(fields: [id_alumno], references: [id_alumno], onDelete: Cascade)
+  materia MateriaCupof @relation(fields: [cupof], references: [cupof], onDelete: Cascade)
+
+  @@map("cursadas_notas")
+}
+
+model InasistenciaDocente {
+  id_asistencia_doc     Int    @id @default(autoincrement())
+  id_profesor           Int
+  periodo_calificacion  String @db.VarChar(50)
+  faltas_enfermedad     Int?   @default(0)
+  faltas_causas_priv    Int?   @default(0)
+  faltas_otras_causas   Int?   @default(0)
+  faltas_injustificadas Int?   @default(0)
+
+  profesor Profesor @relation(fields: [id_profesor], references: [id_profesor], onDelete: Cascade)
+
+  @@map("inasistencias_docentes")
+}

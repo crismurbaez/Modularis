@@ -1,0 +1,74 @@
+import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+import { CryptoService } from '../crypto/crypto.service';
+
+@Injectable()
+export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+  public extended;
+
+  constructor(private cryptoService: CryptoService) {
+    super();
+    this.extended = this.$extends({
+      query: {
+        alumno: {
+          async $allOperations({ operation, args, query }) {
+            if (args.data) {
+              if (args.data.dni) args.data.dni = cryptoService.encrypt(args.data.dni as string);
+              if (args.data.nombre) args.data.nombre = cryptoService.encrypt(args.data.nombre as string);
+              if (args.data.apellido) args.data.apellido = cryptoService.encrypt(args.data.apellido as string);
+            }
+            if (args.where) {
+              if (args.where.dni) args.where.dni = cryptoService.encrypt(args.where.dni as string);
+            }
+            return query(args);
+          },
+        },
+        profesor: {
+          async $allOperations({ operation, args, query }) {
+            if (args.data) {
+              if (args.data.dni) args.data.dni = cryptoService.encrypt(args.data.dni as string);
+              if (args.data.nombre) args.data.nombre = cryptoService.encrypt(args.data.nombre as string);
+              if (args.data.apellido) args.data.apellido = cryptoService.encrypt(args.data.apellido as string);
+            }
+            if (args.where) {
+              if (args.where.dni) args.where.dni = cryptoService.encrypt(args.where.dni as string);
+            }
+            return query(args);
+          },
+        }
+      },
+      result: {
+        alumno: {
+          dni: {
+            compute(data) { return data.dni ? cryptoService.decrypt(data.dni) : data.dni; }
+          },
+          nombre: {
+            compute(data) { return data.nombre ? cryptoService.decrypt(data.nombre) : data.nombre; }
+          },
+          apellido: {
+            compute(data) { return data.apellido ? cryptoService.decrypt(data.apellido) : data.apellido; }
+          }
+        },
+        profesor: {
+          dni: {
+            compute(data) { return data.dni ? cryptoService.decrypt(data.dni) : data.dni; }
+          },
+          nombre: {
+            compute(data) { return data.nombre ? cryptoService.decrypt(data.nombre) : data.nombre; }
+          },
+          apellido: {
+            compute(data) { return data.apellido ? cryptoService.decrypt(data.apellido) : data.apellido; }
+          }
+        }
+      }
+    });
+  }
+
+  async onModuleInit() {
+    await this.$connect();
+  }
+
+  async onModuleDestroy() {
+    await this.$disconnect();
+  }
+}
