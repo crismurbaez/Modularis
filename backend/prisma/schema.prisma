@@ -121,7 +121,7 @@ model MateriaCupof {
   materia_nombre String  @db.VarChar(150)
   area           String? @db.VarChar(100)
   modulo         String? @db.VarChar(50)
-  anio            Int?    @map("año")
+  anio           Int?
   horas_catedra  Int?
   id_orientacion Int?
   codigo_pid     String? @db.VarChar(50)
