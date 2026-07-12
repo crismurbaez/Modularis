@@ -61,7 +61,8 @@ CREATE TABLE profesores (
     mail_personal VARCHAR(120),
     telefono VARCHAR(30),
     titulo_habilitante VARCHAR(150),
-    titulo_docente BOOLEAN DEFAULT FALSE
+    titulo_docente BOOLEAN DEFAULT FALSE,
+    activo BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE alumnos (
@@ -85,10 +86,10 @@ CREATE TABLE materias_cupof (
     materia_nombre VARCHAR(150) NOT NULL,
     area VARCHAR(100),
     modulo VARCHAR(50),
-    año INTEGER,
+    anio INTEGER,
     horas_catedra INTEGER,
     id_orientacion INTEGER REFERENCES orientaciones(id_orientacion),
-    codigo_pid VARCHAR(50)
+    codigo_pid VARCHAR(50),
     activo BOOLEAN DEFAULT TRUE
 );
 

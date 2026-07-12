@@ -85,6 +85,7 @@ model Profesor {
   telefono          String?   @db.VarChar(30)
   titulo_habilitante String?  @db.VarChar(150)
   titulo_docente    Boolean?  @default(false)
+  activo            Boolean   @default(true)
 
   designaciones          Designacion[]
   inasistencias_docentes InasistenciaDocente[]
@@ -120,7 +121,7 @@ model MateriaCupof {
   materia_nombre String  @db.VarChar(150)
   area           String? @db.VarChar(100)
   modulo         String? @db.VarChar(50)
-  ano            Int?    @map("año")
+  anio            Int?    @map("año")
   horas_catedra  Int?
   id_orientacion Int?
   codigo_pid     String? @db.VarChar(50)
