@@ -16,7 +16,7 @@ export class StudentsService {
         throw new BadRequestException('El motivo de baja es obligatorio cuando el estado es BAJA.');
       }
     } else if (id_estado === 1) {
-      id_motivo_baja = null; // Sanitizar motivo de baja si es REGULAR
+      id_motivo_baja = null as any; // Sanitizar motivo de baja si es REGULAR
     }
 
     const data: any = {
@@ -29,17 +29,17 @@ export class StudentsService {
       data.fecha_nacimiento = new Date(fecha_nacimiento);
     }
 
-    const student = await this.prisma.client.alumno.create({ data });
+    const student = await this.prisma.extended.alumno.create({ data });
     return this.calculateAge(student);
   }
 
   async findAll() {
-    const students = await this.prisma.client.alumno.findMany();
-    return students.map(s => this.calculateAge(s));
+    const students = await this.prisma.extended.alumno.findMany();
+    return students.map((s: any) => this.calculateAge(s));
   }
 
   async findOne(id: number) {
-    const student = await this.prisma.client.alumno.findUnique({
+    const student = await this.prisma.extended.alumno.findUnique({
       where: { id_alumno: id },
     });
     if (!student) return null;
@@ -49,7 +49,7 @@ export class StudentsService {
   async update(id: number, updateStudentDto: UpdateStudentDto) {
     let { id_estado, id_motivo_baja, fecha_nacimiento, ...rest } = updateStudentDto;
 
-    const currentStudent = await this.prisma.client.alumno.findUnique({ where: { id_alumno: id } });
+    const currentStudent = await this.prisma.extended.alumno.findUnique({ where: { id_alumno: id } });
     if (!currentStudent) throw new BadRequestException('Estudiante no encontrado');
 
     const finalEstado = id_estado ?? currentStudent.id_estado;
@@ -64,7 +64,7 @@ export class StudentsService {
     const data: any = { ...rest, id_estado: finalEstado, id_motivo_baja: finalMotivo };
     if (fecha_nacimiento) data.fecha_nacimiento = new Date(fecha_nacimiento);
 
-    const updated = await this.prisma.client.alumno.update({
+    const updated = await this.prisma.extended.alumno.update({
       where: { id_alumno: id },
       data,
     });

@@ -21,26 +21,30 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       query: {
         alumno: {
           async $allOperations({ operation, args, query }) {
-            if (args.data) {
-              if (args.data.dni) args.data.dni = cryptoService.encrypt(args.data.dni as string);
-              if (args.data.nombre) args.data.nombre = cryptoService.encrypt(args.data.nombre as string);
-              if (args.data.apellido) args.data.apellido = cryptoService.encrypt(args.data.apellido as string);
+            const data = (args as any).data;
+            if (data) {
+              if (data.dni) data.dni = cryptoService.encrypt(data.dni as string);
+              if (data.nombre) data.nombre = cryptoService.encrypt(data.nombre as string);
+              if (data.apellido) data.apellido = cryptoService.encrypt(data.apellido as string);
             }
-            if (args.where) {
-              if (args.where.dni) args.where.dni = cryptoService.encrypt(args.where.dni as string);
+            const where = (args as any).where;
+            if (where) {
+              if (where.dni) where.dni = cryptoService.encrypt(where.dni as string);
             }
             return query(args);
           },
         },
         profesor: {
           async $allOperations({ operation, args, query }) {
-            if (args.data) {
-              if (args.data.dni) args.data.dni = cryptoService.encrypt(args.data.dni as string);
-              if (args.data.nombre) args.data.nombre = cryptoService.encrypt(args.data.nombre as string);
-              if (args.data.apellido) args.data.apellido = cryptoService.encrypt(args.data.apellido as string);
+            const data = (args as any).data;
+            if (data) {
+              if (data.dni) data.dni = cryptoService.encrypt(data.dni as string);
+              if (data.nombre) data.nombre = cryptoService.encrypt(data.nombre as string);
+              if (data.apellido) data.apellido = cryptoService.encrypt(data.apellido as string);
             }
-            if (args.where) {
-              if (args.where.dni) args.where.dni = cryptoService.encrypt(args.where.dni as string);
+            const where = (args as any).where;
+            if (where) {
+              if (where.dni) where.dni = cryptoService.encrypt(where.dni as string);
             }
             return query(args);
           },

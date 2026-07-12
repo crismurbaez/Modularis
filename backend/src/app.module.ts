@@ -9,9 +9,10 @@ import { TeachersModule } from './teachers/teachers.module';
 import { AcademicsModule } from './academics/academics.module';
 import { AssignmentsModule } from './assignments/assignments.module';
 import { GradesModule } from './grades/grades.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [CryptoModule, PrismaModule, AuthModule, StudentsModule, TeachersModule, AcademicsModule, AssignmentsModule, GradesModule],
+  imports: [CryptoModule, PrismaModule, AuthModule, UsersModule, StudentsModule, TeachersModule, AcademicsModule, AssignmentsModule, GradesModule],
   controllers: [AppController],
   providers: [AppService],
 })

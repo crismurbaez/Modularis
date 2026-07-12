@@ -1,0 +1,95 @@
+import { CreateTeacherDto } from './dto/create-teacher.dto';
+import { UpdateTeacherDto } from './dto/update-teacher.dto';
+import { CreateAbsenceDto } from './dto/create-absence.dto';
+import { PrismaService } from '../prisma/prisma.service';
+export declare class TeachersService {
+    private prisma;
+    constructor(prisma: PrismaService);
+    create(createTeacherDto: CreateTeacherDto): Promise<{
+        id_profesor: number;
+        activo: boolean;
+        fecha_nacimiento: Date | null;
+        cuil: string;
+        direccion: string | null;
+        localidad: string | null;
+        distrito: string | null;
+        mail_abc: string | null;
+        mail_personal: string | null;
+        telefono: string | null;
+        titulo_habilitante: string | null;
+        titulo_docente: boolean | null;
+        dni: string;
+        nombre: string;
+        apellido: string;
+    }>;
+    findAll(): import("@prisma/client/runtime/client").PrismaPromise<{
+        id_profesor: number;
+        activo: boolean;
+        fecha_nacimiento: Date | null;
+        cuil: string;
+        direccion: string | null;
+        localidad: string | null;
+        distrito: string | null;
+        mail_abc: string | null;
+        mail_personal: string | null;
+        telefono: string | null;
+        titulo_habilitante: string | null;
+        titulo_docente: boolean | null;
+        dni: string;
+        nombre: string;
+        apellido: string;
+    }[]>;
+    findOne(id: number): Promise<{
+        estadistica_faltas_totales: any;
+        inasistencias_docentes: {
+            id_profesor: number;
+            periodo_calificacion: string;
+            faltas_enfermedad: number | null;
+            faltas_causas_priv: number | null;
+            faltas_otras_causas: number | null;
+            faltas_injustificadas: number | null;
+            id_asistencia_doc: number;
+        }[];
+        id_profesor: number;
+        activo: boolean;
+        fecha_nacimiento: Date | null;
+        cuil: string;
+        direccion: string | null;
+        localidad: string | null;
+        distrito: string | null;
+        mail_abc: string | null;
+        mail_personal: string | null;
+        telefono: string | null;
+        titulo_habilitante: string | null;
+        titulo_docente: boolean | null;
+        dni: string;
+        nombre: string;
+        apellido: string;
+    }>;
+    update(id: number, updateTeacherDto: UpdateTeacherDto): Promise<{
+        id_profesor: number;
+        activo: boolean;
+        fecha_nacimiento: Date | null;
+        cuil: string;
+        direccion: string | null;
+        localidad: string | null;
+        distrito: string | null;
+        mail_abc: string | null;
+        mail_personal: string | null;
+        telefono: string | null;
+        titulo_habilitante: string | null;
+        titulo_docente: boolean | null;
+        dni: string;
+        nombre: string;
+        apellido: string;
+    }>;
+    addAbsence(id: number, createAbsenceDto: CreateAbsenceDto): Promise<{
+        id_profesor: number;
+        periodo_calificacion: string;
+        faltas_enfermedad: number | null;
+        faltas_causas_priv: number | null;
+        faltas_otras_causas: number | null;
+        faltas_injustificadas: number | null;
+        id_asistencia_doc: number;
+    }>;
+}
