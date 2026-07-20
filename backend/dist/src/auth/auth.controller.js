@@ -12,16 +12,32 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthController = void 0;
+exports.AuthController = exports.LoginDto = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const swagger_1 = require("@nestjs/swagger");
+const class_validator_1 = require("class-validator");
+class LoginDto {
+}
+exports.LoginDto = LoginDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '00000000', description: 'El DNI del usuario' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], LoginDto.prototype, "dni", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '123456', description: 'La contraseña del usuario' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], LoginDto.prototype, "password", void 0);
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
     login(signInDto) {
-        return this.authService.login(signInDto.dni, signInDto.pass);
+        return this.authService.login(signInDto.dni, signInDto.password);
     }
 };
 exports.AuthController = AuthController;
@@ -33,7 +49,7 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 401, description: 'Credenciales inválidas' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [LoginDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "login", null);
 exports.AuthController = AuthController = __decorate([
