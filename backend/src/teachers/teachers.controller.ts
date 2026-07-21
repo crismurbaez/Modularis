@@ -3,7 +3,7 @@ import { TeachersService } from './teachers.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { CreateAbsenceDto } from './dto/create-absence.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 @ApiTags('teachers')
 @Controller('teachers')
@@ -11,6 +11,7 @@ export class TeachersController {
   constructor(private readonly teachersService: TeachersService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Crear un nuevo profesor' })
   create(@Body() createTeacherDto: CreateTeacherDto) {
     return this.teachersService.create(createTeacherDto);
   }

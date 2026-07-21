@@ -42,6 +42,7 @@ let TeachersController = class TeachersController {
 exports.TeachersController = TeachersController;
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Crear un nuevo profesor' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_teacher_dto_1.CreateTeacherDto]),
