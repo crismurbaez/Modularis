@@ -38,12 +38,12 @@ export class CreateTeacherDto {
   @IsString()
   distrito?: string;
 
-  @ApiPropertyOptional({ example: 'juan.perez@abc.gob.ar', description: 'Correo abc' })
+  @ApiPropertyOptional({ example: 'pepito.gomez@abc.gob.ar', description: 'Correo abc' })
   @IsOptional()
   @IsString()
   mail_abc?: string;
 
-  @ApiPropertyOptional({ example: 'juan.perez@gmail.com', description: 'Correo personal' })
+  @ApiPropertyOptional({ example: 'pepito.gomez@gmail.com', description: 'Correo personal' })
   @IsOptional()
   @IsString()
   mail_personal?: string;

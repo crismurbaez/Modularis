@@ -90,9 +90,8 @@ export declare class AssignmentsService {
                         dni: string;
                         nombre: string;
                         apellido: string;
-                        id_profesor: number;
-                        activo: boolean;
                         fecha_nacimiento: Date | null;
+                        id_profesor: number;
                         cuil: string;
                         direccion: string | null;
                         localidad: string | null;
@@ -102,6 +101,7 @@ export declare class AssignmentsService {
                         telefono: string | null;
                         titulo_habilitante: string | null;
                         titulo_docente: boolean | null;
+                        activo: boolean;
                     }): string;
                 };
                 nombre: () => {
@@ -109,9 +109,8 @@ export declare class AssignmentsService {
                         dni: string;
                         nombre: string;
                         apellido: string;
-                        id_profesor: number;
-                        activo: boolean;
                         fecha_nacimiento: Date | null;
+                        id_profesor: number;
                         cuil: string;
                         direccion: string | null;
                         localidad: string | null;
@@ -121,6 +120,7 @@ export declare class AssignmentsService {
                         telefono: string | null;
                         titulo_habilitante: string | null;
                         titulo_docente: boolean | null;
+                        activo: boolean;
                     }): string;
                 };
                 apellido: () => {
@@ -128,9 +128,8 @@ export declare class AssignmentsService {
                         dni: string;
                         nombre: string;
                         apellido: string;
-                        id_profesor: number;
-                        activo: boolean;
                         fecha_nacimiento: Date | null;
+                        id_profesor: number;
                         cuil: string;
                         direccion: string | null;
                         localidad: string | null;
@@ -140,6 +139,7 @@ export declare class AssignmentsService {
                         telefono: string | null;
                         titulo_habilitante: string | null;
                         titulo_docente: boolean | null;
+                        activo: boolean;
                     }): string;
                 };
             };

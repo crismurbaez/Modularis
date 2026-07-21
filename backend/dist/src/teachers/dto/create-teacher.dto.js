@@ -60,13 +60,13 @@ __decorate([
     __metadata("design:type", String)
 ], CreateTeacherDto.prototype, "distrito", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 'juan.perez@abc.gob.ar', description: 'Correo abc' }),
+    (0, swagger_1.ApiPropertyOptional)({ example: 'pepito.gomez@abc.gob.ar', description: 'Correo abc' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateTeacherDto.prototype, "mail_abc", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 'juan.perez@gmail.com', description: 'Correo personal' }),
+    (0, swagger_1.ApiPropertyOptional)({ example: 'pepito.gomez@gmail.com', description: 'Correo personal' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
