@@ -3,7 +3,40 @@ import { UsersService } from './users.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { PermissionsGuard } from '../auth/permissions.guard';
 import { RequirePermissions } from '../auth/permissions.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+
+export class CreateUserDto {
+  @ApiProperty({ example: '12345678', description: 'DNI del usuario' })
+  @IsString()
+  @IsNotEmpty()
+  dni: string;
+
+  @ApiProperty({ example: '123456', description: 'Contraseña del usuario' })
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+
+  @ApiProperty({ example: 'Juan', description: 'Nombre del usuario' })
+  @IsString()
+  @IsNotEmpty()
+  nombre: string;
+
+  @ApiProperty({ example: 'Pérez', description: 'Apellido del usuario' })
+  @IsString()
+  @IsNotEmpty()
+  apellido: string;
+
+  @ApiProperty({ example: 1, description: 'ID del rol del usuario' })
+  @IsNumber()
+  @IsNotEmpty()
+  id_rol: number;
+
+  @ApiPropertyOptional({ example: 2, description: 'ID del profesor asociado (opcional)' })
+  @IsNumber()
+  @IsOptional()
+  id_profesor?: number;
+}
 
 @ApiTags('users')
 @ApiBearerAuth()
@@ -22,7 +55,7 @@ export class UsersController {
   @Post()
   @RequirePermissions('GESTIONAR_USUARIOS')
   @ApiOperation({ summary: 'Crear un nuevo usuario' })
-  create(@Body() createUserDto: Record<string, any>) {
+  create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 

@@ -1,4 +1,12 @@
 import { UsersService } from './users.service';
+export declare class CreateUserDto {
+    dni: string;
+    password: string;
+    nombre: string;
+    apellido: string;
+    id_rol: number;
+    id_profesor?: number;
+}
 export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
@@ -19,8 +27,8 @@ export declare class UsersController {
             apellido: string;
             id_profesor: number;
             activo: boolean;
-            fecha_nacimiento: Date | null;
             cuil: string;
+            fecha_nacimiento: Date | null;
             direccion: string | null;
             localidad: string | null;
             distrito: string | null;
@@ -31,7 +39,7 @@ export declare class UsersController {
             titulo_docente: boolean | null;
         } | null;
     }[]>;
-    create(createUserDto: Record<string, any>): Promise<{
+    create(createUserDto: CreateUserDto): Promise<{
         id_usuario: number;
         dni: string;
         nombre: string | null;

@@ -12,13 +12,53 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersController = void 0;
+exports.UsersController = exports.CreateUserDto = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const auth_guard_1 = require("../auth/auth.guard");
 const permissions_guard_1 = require("../auth/permissions.guard");
 const permissions_decorator_1 = require("../auth/permissions.decorator");
 const swagger_1 = require("@nestjs/swagger");
+const class_validator_1 = require("class-validator");
+class CreateUserDto {
+}
+exports.CreateUserDto = CreateUserDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '12345678', description: 'DNI del usuario' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], CreateUserDto.prototype, "dni", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '123456', description: 'Contraseña del usuario' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], CreateUserDto.prototype, "password", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Juan', description: 'Nombre del usuario' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], CreateUserDto.prototype, "nombre", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Pérez', description: 'Apellido del usuario' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], CreateUserDto.prototype, "apellido", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 1, description: 'ID del rol del usuario' }),
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Number)
+], CreateUserDto.prototype, "id_rol", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 2, description: 'ID del profesor asociado (opcional)' }),
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Number)
+], CreateUserDto.prototype, "id_profesor", void 0);
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -51,7 +91,7 @@ __decorate([
     (0, swagger_1.ApiOperation)({ summary: 'Crear un nuevo usuario' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [CreateUserDto]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "create", null);
 __decorate([
