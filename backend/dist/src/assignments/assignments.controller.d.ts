@@ -89,8 +89,9 @@ export declare class AssignmentsController {
                         dni: string;
                         nombre: string;
                         apellido: string;
-                        fecha_nacimiento: Date | null;
                         id_profesor: number;
+                        activo: boolean;
+                        fecha_nacimiento: Date | null;
                         cuil: string;
                         direccion: string | null;
                         localidad: string | null;
@@ -100,7 +101,6 @@ export declare class AssignmentsController {
                         telefono: string | null;
                         titulo_habilitante: string | null;
                         titulo_docente: boolean | null;
-                        activo: boolean;
                     }): string;
                 };
                 nombre: () => {
@@ -108,8 +108,9 @@ export declare class AssignmentsController {
                         dni: string;
                         nombre: string;
                         apellido: string;
-                        fecha_nacimiento: Date | null;
                         id_profesor: number;
+                        activo: boolean;
+                        fecha_nacimiento: Date | null;
                         cuil: string;
                         direccion: string | null;
                         localidad: string | null;
@@ -119,7 +120,6 @@ export declare class AssignmentsController {
                         telefono: string | null;
                         titulo_habilitante: string | null;
                         titulo_docente: boolean | null;
-                        activo: boolean;
                     }): string;
                 };
                 apellido: () => {
@@ -127,8 +127,9 @@ export declare class AssignmentsController {
                         dni: string;
                         nombre: string;
                         apellido: string;
-                        fecha_nacimiento: Date | null;
                         id_profesor: number;
+                        activo: boolean;
+                        fecha_nacimiento: Date | null;
                         cuil: string;
                         direccion: string | null;
                         localidad: string | null;
@@ -138,7 +139,6 @@ export declare class AssignmentsController {
                         telefono: string | null;
                         titulo_habilitante: string | null;
                         titulo_docente: boolean | null;
-                        activo: boolean;
                     }): string;
                 };
             };

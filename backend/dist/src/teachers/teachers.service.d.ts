@@ -6,8 +6,9 @@ export declare class TeachersService {
     private prisma;
     constructor(prisma: PrismaService);
     create(createTeacherDto: CreateTeacherDto): Promise<{
-        fecha_nacimiento: Date | null;
         id_profesor: number;
+        activo: boolean;
+        fecha_nacimiento: Date | null;
         cuil: string;
         direccion: string | null;
         localidad: string | null;
@@ -17,14 +18,14 @@ export declare class TeachersService {
         telefono: string | null;
         titulo_habilitante: string | null;
         titulo_docente: boolean | null;
-        activo: boolean;
         dni: string;
         nombre: string;
         apellido: string;
     }>;
     findAll(): import("@prisma/client/runtime/client").PrismaPromise<{
-        fecha_nacimiento: Date | null;
         id_profesor: number;
+        activo: boolean;
+        fecha_nacimiento: Date | null;
         cuil: string;
         direccion: string | null;
         localidad: string | null;
@@ -34,7 +35,6 @@ export declare class TeachersService {
         telefono: string | null;
         titulo_habilitante: string | null;
         titulo_docente: boolean | null;
-        activo: boolean;
         dni: string;
         nombre: string;
         apellido: string;
@@ -50,8 +50,9 @@ export declare class TeachersService {
             faltas_injustificadas: number | null;
             id_asistencia_doc: number;
         }[];
-        fecha_nacimiento: Date | null;
         id_profesor: number;
+        activo: boolean;
+        fecha_nacimiento: Date | null;
         cuil: string;
         direccion: string | null;
         localidad: string | null;
@@ -61,14 +62,14 @@ export declare class TeachersService {
         telefono: string | null;
         titulo_habilitante: string | null;
         titulo_docente: boolean | null;
-        activo: boolean;
         dni: string;
         nombre: string;
         apellido: string;
     }>;
     update(id: number, updateTeacherDto: UpdateTeacherDto): Promise<{
-        fecha_nacimiento: Date | null;
         id_profesor: number;
+        activo: boolean;
+        fecha_nacimiento: Date | null;
         cuil: string;
         direccion: string | null;
         localidad: string | null;
@@ -78,7 +79,6 @@ export declare class TeachersService {
         telefono: string | null;
         titulo_habilitante: string | null;
         titulo_docente: boolean | null;
-        activo: boolean;
         dni: string;
         nombre: string;
         apellido: string;

@@ -27,8 +27,8 @@ export declare class UsersController {
             apellido: string;
             id_profesor: number;
             activo: boolean;
-            cuil: string;
             fecha_nacimiento: Date | null;
+            cuil: string;
             direccion: string | null;
             localidad: string | null;
             distrito: string | null;
