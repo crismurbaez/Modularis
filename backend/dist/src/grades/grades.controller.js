@@ -38,6 +38,7 @@ let GradesController = class GradesController {
 exports.GradesController = GradesController;
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Cargar una nueva calificación' }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_grade_dto_1.CreateGradeDto]),

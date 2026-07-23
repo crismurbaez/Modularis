@@ -6,7 +6,6 @@ export declare class GradesService {
     constructor(prisma: PrismaService);
     create(createGradeDto: CreateGradeDto): Promise<{
         id_alumno: number;
-        cupof: string;
         ciclo_lectivo: number;
         nota_cuat1: string | null;
         faltas_cuat1: number | null;
@@ -16,10 +15,10 @@ export declare class GradesService {
         mes_acreditacion: string | null;
         anio_acreditacion: number | null;
         id_cursada: number;
+        cupof: string;
     }>;
     findAll(): import("@prisma/client/runtime/client").PrismaPromise<{
         id_alumno: number;
-        cupof: string;
         ciclo_lectivo: number;
         nota_cuat1: string | null;
         faltas_cuat1: number | null;
@@ -29,6 +28,7 @@ export declare class GradesService {
         mes_acreditacion: string | null;
         anio_acreditacion: number | null;
         id_cursada: number;
+        cupof: string;
     }[]>;
     findOne(id: number): import("@prisma/client/runtime/client").DynamicModelExtensionFluentApi<Prisma.TypeMap<import("@prisma/client/runtime/client").InternalArgs & {
         result: {
@@ -91,9 +91,8 @@ export declare class GradesService {
                         dni: string;
                         nombre: string;
                         apellido: string;
-                        id_profesor: number;
-                        activo: boolean;
                         fecha_nacimiento: Date | null;
+                        id_profesor: number;
                         cuil: string;
                         direccion: string | null;
                         localidad: string | null;
@@ -103,6 +102,7 @@ export declare class GradesService {
                         telefono: string | null;
                         titulo_habilitante: string | null;
                         titulo_docente: boolean | null;
+                        activo: boolean;
                     }): string;
                 };
                 nombre: () => {
@@ -110,9 +110,8 @@ export declare class GradesService {
                         dni: string;
                         nombre: string;
                         apellido: string;
-                        id_profesor: number;
-                        activo: boolean;
                         fecha_nacimiento: Date | null;
+                        id_profesor: number;
                         cuil: string;
                         direccion: string | null;
                         localidad: string | null;
@@ -122,6 +121,7 @@ export declare class GradesService {
                         telefono: string | null;
                         titulo_habilitante: string | null;
                         titulo_docente: boolean | null;
+                        activo: boolean;
                     }): string;
                 };
                 apellido: () => {
@@ -129,9 +129,8 @@ export declare class GradesService {
                         dni: string;
                         nombre: string;
                         apellido: string;
-                        id_profesor: number;
-                        activo: boolean;
                         fecha_nacimiento: Date | null;
+                        id_profesor: number;
                         cuil: string;
                         direccion: string | null;
                         localidad: string | null;
@@ -141,6 +140,7 @@ export declare class GradesService {
                         telefono: string | null;
                         titulo_habilitante: string | null;
                         titulo_docente: boolean | null;
+                        activo: boolean;
                     }): string;
                 };
             };
@@ -150,7 +150,6 @@ export declare class GradesService {
         client: {};
     }, {}>, "CursadaNota", "findUnique", null> & import("@prisma/client/runtime/client").PrismaPromise<{
         id_alumno: number;
-        cupof: string;
         ciclo_lectivo: number;
         nota_cuat1: string | null;
         faltas_cuat1: number | null;
@@ -160,6 +159,7 @@ export declare class GradesService {
         mes_acreditacion: string | null;
         anio_acreditacion: number | null;
         id_cursada: number;
+        cupof: string;
     } | null>;
     update(id: number, data: Prisma.CursadaNotaUpdateInput): import("@prisma/client/runtime/client").DynamicModelExtensionFluentApi<Prisma.TypeMap<import("@prisma/client/runtime/client").InternalArgs & {
         result: {
@@ -222,9 +222,8 @@ export declare class GradesService {
                         dni: string;
                         nombre: string;
                         apellido: string;
-                        id_profesor: number;
-                        activo: boolean;
                         fecha_nacimiento: Date | null;
+                        id_profesor: number;
                         cuil: string;
                         direccion: string | null;
                         localidad: string | null;
@@ -234,6 +233,7 @@ export declare class GradesService {
                         telefono: string | null;
                         titulo_habilitante: string | null;
                         titulo_docente: boolean | null;
+                        activo: boolean;
                     }): string;
                 };
                 nombre: () => {
@@ -241,9 +241,8 @@ export declare class GradesService {
                         dni: string;
                         nombre: string;
                         apellido: string;
-                        id_profesor: number;
-                        activo: boolean;
                         fecha_nacimiento: Date | null;
+                        id_profesor: number;
                         cuil: string;
                         direccion: string | null;
                         localidad: string | null;
@@ -253,6 +252,7 @@ export declare class GradesService {
                         telefono: string | null;
                         titulo_habilitante: string | null;
                         titulo_docente: boolean | null;
+                        activo: boolean;
                     }): string;
                 };
                 apellido: () => {
@@ -260,9 +260,8 @@ export declare class GradesService {
                         dni: string;
                         nombre: string;
                         apellido: string;
-                        id_profesor: number;
-                        activo: boolean;
                         fecha_nacimiento: Date | null;
+                        id_profesor: number;
                         cuil: string;
                         direccion: string | null;
                         localidad: string | null;
@@ -272,6 +271,7 @@ export declare class GradesService {
                         telefono: string | null;
                         titulo_habilitante: string | null;
                         titulo_docente: boolean | null;
+                        activo: boolean;
                     }): string;
                 };
             };
@@ -281,7 +281,6 @@ export declare class GradesService {
         client: {};
     }, {}>, "CursadaNota", "update", never> & import("@prisma/client/runtime/client").PrismaPromise<{
         id_alumno: number;
-        cupof: string;
         ciclo_lectivo: number;
         nota_cuat1: string | null;
         faltas_cuat1: number | null;
@@ -291,5 +290,6 @@ export declare class GradesService {
         mes_acreditacion: string | null;
         anio_acreditacion: number | null;
         id_cursada: number;
+        cupof: string;
     }>;
 }

@@ -11,53 +11,64 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateGradeDto = void 0;
 const class_validator_1 = require("class-validator");
+const swagger_1 = require("@nestjs/swagger");
 const is_grade_valid_decorator_1 = require("./is-grade-valid.decorator");
 class CreateGradeDto {
 }
 exports.CreateGradeDto = CreateGradeDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 1, description: 'ID del alumno' }),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CreateGradeDto.prototype, "id_alumno", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 'CUP-12345', description: 'Código CUPOF de la materia' }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateGradeDto.prototype, "cupof", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 2024, description: 'Ciclo lectivo (año)' }),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CreateGradeDto.prototype, "ciclo_lectivo", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: '8', description: 'Nota del primer cuatrimestre' }),
     (0, class_validator_1.IsOptional)(),
     (0, is_grade_valid_decorator_1.IsGradeValid)(),
     __metadata("design:type", String)
 ], CreateGradeDto.prototype, "nota_cuat1", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 0, description: 'Faltas en el primer cuatrimestre' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CreateGradeDto.prototype, "faltas_cuat1", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: '9', description: 'Nota del segundo cuatrimestre' }),
     (0, class_validator_1.IsOptional)(),
     (0, is_grade_valid_decorator_1.IsGradeValid)(),
     __metadata("design:type", String)
 ], CreateGradeDto.prototype, "nota_cuat2", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 1, description: 'Faltas en el segundo cuatrimestre' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CreateGradeDto.prototype, "faltas_cuat2", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 'APROBADO', description: 'Condición final de la materia' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateGradeDto.prototype, "condicion_materia", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 'Diciembre', description: 'Mes en que se acreditó la materia' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateGradeDto.prototype, "mes_acreditacion", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 2024, description: 'Año en que se acreditó la materia' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
