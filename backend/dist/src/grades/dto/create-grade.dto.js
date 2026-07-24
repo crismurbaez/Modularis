@@ -22,10 +22,10 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateGradeDto.prototype, "id_alumno", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'CUP-12345', description: 'Código CUPOF de la materia' }),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateGradeDto.prototype, "cupof", void 0);
+    (0, swagger_1.ApiProperty)({ example: 1, description: 'ID de la materia' }),
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], CreateGradeDto.prototype, "id_materia", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 2024, description: 'Ciclo lectivo (año)' }),
     (0, class_validator_1.IsInt)(),
@@ -56,11 +56,11 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateGradeDto.prototype, "faltas_cuat2", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 'APROBADO', description: 'Condición final de la materia' }),
+    (0, swagger_1.ApiPropertyOptional)({ example: 1, description: 'ID de la condición final de la materia (1=APROBADO, 2=PENDIENTE)' }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateGradeDto.prototype, "condicion_materia", void 0);
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], CreateGradeDto.prototype, "id_condicion_materia", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: 'Diciembre', description: 'Mes en que se acreditó la materia' }),
     (0, class_validator_1.IsOptional)(),

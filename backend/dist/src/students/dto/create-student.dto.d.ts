@@ -1,5 +1,6 @@
 export declare class CreateStudentDto {
     dni: string;
+    cuil: string;
     nombre: string;
     apellido: string;
     fecha_nacimiento?: string;

@@ -4,23 +4,21 @@ export declare class UsersService {
     constructor(prisma: PrismaService);
     findAll(): Promise<{
         id_usuario: number;
-        dni: string;
-        nombre: string | null;
-        apellido: string | null;
+        username: string;
         activo: boolean;
         rol: {
-            nombre: string;
             id_rol: number;
+            nombre: string;
             descripcion: string | null;
         };
-        profesor: {
+        personal: {
+            id_personal: number;
+            activo: boolean;
             dni: string;
+            cuil: string;
             nombre: string;
             apellido: string;
-            id_profesor: number;
-            activo: boolean;
-            fecha_nacimiento: Date | null;
-            cuil: string;
+            fecha_nacimiento: string | null;
             direccion: string | null;
             localidad: string | null;
             distrito: string | null;
@@ -33,18 +31,18 @@ export declare class UsersService {
     }[]>;
     findOne(id: number): Promise<{
         rol: {
-            nombre: string;
             id_rol: number;
+            nombre: string;
             descripcion: string | null;
         };
-        profesor: {
+        personal: {
+            id_personal: number;
+            activo: boolean;
             dni: string;
+            cuil: string;
             nombre: string;
             apellido: string;
-            id_profesor: number;
-            activo: boolean;
-            fecha_nacimiento: Date | null;
-            cuil: string;
+            fecha_nacimiento: string | null;
             direccion: string | null;
             localidad: string | null;
             distrito: string | null;
@@ -56,19 +54,37 @@ export declare class UsersService {
         } | null;
     } & {
         id_usuario: number;
-        dni: string;
+        username: string;
         password_hash: string;
-        nombre: string | null;
-        apellido: string | null;
         id_rol: number;
-        id_profesor: number | null;
+        id_personal: number | null;
         activo: boolean;
     }>;
     create(data: any): Promise<{
         id_usuario: number;
-        dni: string;
-        nombre: string | null;
-        apellido: string | null;
+        username: string;
+        rol: {
+            id_rol: number;
+            nombre: string;
+            descripcion: string | null;
+        };
+        personal: {
+            id_personal: number;
+            activo: boolean;
+            dni: string;
+            cuil: string;
+            nombre: string;
+            apellido: string;
+            fecha_nacimiento: string | null;
+            direccion: string | null;
+            localidad: string | null;
+            distrito: string | null;
+            mail_abc: string | null;
+            mail_personal: string | null;
+            telefono: string | null;
+            titulo_habilitante: string | null;
+            titulo_docente: boolean | null;
+        } | null;
     }>;
     updateStatus(id: number, activo: boolean): Promise<{
         id_usuario: number;
@@ -77,8 +93,8 @@ export declare class UsersService {
     updateRole(id: number, id_rol: number): Promise<{
         id_usuario: number;
         rol: {
-            nombre: string;
             id_rol: number;
+            nombre: string;
             descripcion: string | null;
         };
     }>;

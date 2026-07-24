@@ -3,6 +3,7 @@
 -- ===========================================================================
 
 INSERT INTO roles (nombre, descripcion) VALUES
+('SUPERADMIN', 'Programador y emergencias (Oculto)'),
 ('DIRECTOR', 'Control total del sistema'),
 ('PRECEPTOR', 'Gestión de asistencia y alumnos'),
 ('PROFESOR', 'Carga de calificaciones');
@@ -14,13 +15,27 @@ INSERT INTO permisos (codigo, modulo, descripcion) VALUES
 ('GESTIONAR_USUARIOS', 'CONFIGURACION', 'Permite crear o modificar usuarios');
 
 INSERT INTO rol_permisos (id_rol, id_permiso) VALUES
-(1, 1), -- Director -> Acceso Total
-(2, 3), -- Preceptor -> Modificar Asistencia
-(3, 2); -- Profesor -> Modificar Calificaciones
+(1, 1), -- Superadmin -> Acceso Total
+(2, 1), -- Director -> Acceso Total
+(3, 3), -- Preceptor -> Modificar Asistencia
+(4, 2); -- Profesor -> Modificar Calificaciones
 
--- Hash de la contraseña '123456' generado por bcrypt (ejemplo con salt 10)
-INSERT INTO usuarios (dni, password_hash, nombre, apellido, id_rol, activo) VALUES
-('00000000', '$2b$10$EpN10t5T0hOQ/e.k.hO3.u6zX2L4e.rC.q6i/Xw4qP4Mv0Q.O/R6m', 'Yanina', 'Poncela', 1, TRUE);
+-- ===========================================================================
+-- USUARIOS Y PERSONAL INICIAL
+-- ===========================================================================
+
+-- 1. Superusuario oculto (sin id_personal)
+INSERT INTO usuarios (username, password_hash, id_rol, activo) VALUES
+('superadmin', '$2b$10$EpN10t5T0hOQ/e.k.hO3.u6zX2L4e.rC.q6i/Xw4qP4Mv0Q.O/R6m', 1, TRUE);
+
+-- 2. Director inicial (Yanina)
+-- Primero creamos el registro en personal_docente
+INSERT INTO personal_docente (dni, cuil, nombre, apellido) VALUES
+('00000000', '27000000000', 'Yanina', 'Poncela');
+
+-- Luego vinculamos el usuario
+INSERT INTO usuarios (username, password_hash, id_rol, id_personal, activo) VALUES
+('00000000', '$2b$10$EpN10t5T0hOQ/e.k.hO3.u6zX2L4e.rC.q6i/Xw4qP4Mv0Q.O/R6m', 2, 1, TRUE);
 
 -- ===========================================================================
 -- SEEDS PARA MODULARIS (Catálogos Oficiales de PBA)
@@ -62,7 +77,27 @@ INSERT INTO motivo_baja_alumnos (nombre, detalle) VALUES
 ('Salud', 'Problemas de salud crónicos o impedimento médico temporal'),
 ('Socioeconómico', 'Dificultades familiares o de transporte'),
 ('Contexto de Encierro - Libertad', 'Egreso por cumplimiento de condena o libertad condicional (Sedes Penales)'),
-('Desconocido', 'Ausencia prolongada sin justificación ni comunicación con el CENS');
+('Desconocido', 'Ausencia prolongada sin justificación ni comunicación con el CENS'),
+('MUERTE', 'Fallecimiento del estudiante');
+
+-- 5.1. Condiciones de Materia
+INSERT INTO condicion_materia (nombre, detalle) VALUES
+('APROBADO', 'Calificación mayor o igual a 4 en ambos cuatrimestres'),
+('PENDIENTE', 'Calificación menor a 4 en algún cuatrimestre');
+
+-- 5.2. Causas de Inasistencia de Alumnos
+INSERT INTO causa_inasistencia_alumnos (nombre, detalle) VALUES
+('VISITA', 'Inasistencia por visita de familiares (Contexto de encierro)'),
+('COMPARENDO', 'Traslado al juzgado o dependencias judiciales'),
+('ENFERMEDAD', 'Inasistencia por motivos de salud'),
+('INJUSTIFICADA', 'Falta sin motivo declarado');
+
+-- 5.3. Motivos de Inasistencia de Docentes
+INSERT INTO motivo_inasistencias_docentes (nombre, detalle) VALUES
+('Enfermedad', 'Licencia médica'),
+('Causas Privadas', 'Motivos personales justificados'),
+('Otras Causas', 'Licencia gremial, maternidad, etc.'),
+('Injustificada', 'Falta sin aviso ni justificación');
 
 -- 6. Límites Paramétricos de Calificación (Reglas de Negocio en la Base de Datos)
 INSERT INTO limites_calificacion_alumnos (limite_superior, limite_inferior) VALUES (10, 1);
@@ -73,7 +108,7 @@ INSERT INTO limites_calificacion_docentes (limite_superior, limite_inferior) VAL
 -- ===========================================================================
 
 -- 7. Materias desde codigos_pid_cupof.md (Orientación en Economía y Administración - C.E)
-INSERT INTO materias_cupof (cupof, materia_nombre, area, modulo, anio, id_orientacion, codigo_pid) VALUES
+INSERT INTO materias (cupof, materia_nombre, area, modulo, anio, id_orientacion, codigo_pid) VALUES
 -- 1º AÑO
 ('2741683', 'Ciencias Sociales 1', 'CIENCIAS SOCIALES 1-2', 'Módulo 1', 1, 3, 'JVW'),
 ('2741697', 'Ciencias Sociales 2', 'CIENCIAS SOCIALES 1-2', 'Módulo 2', 1, 3, 'JVW'),

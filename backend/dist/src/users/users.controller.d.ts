@@ -1,34 +1,30 @@
 import { UsersService } from './users.service';
 export declare class CreateUserDto {
-    dni: string;
+    username: string;
     password: string;
-    nombre: string;
-    apellido: string;
     id_rol: number;
-    id_profesor?: number;
+    id_personal?: number;
 }
 export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
     findAll(): Promise<{
         id_usuario: number;
-        dni: string;
-        nombre: string | null;
-        apellido: string | null;
+        username: string;
         activo: boolean;
         rol: {
-            nombre: string;
             id_rol: number;
+            nombre: string;
             descripcion: string | null;
         };
-        profesor: {
+        personal: {
+            id_personal: number;
+            activo: boolean;
             dni: string;
+            cuil: string;
             nombre: string;
             apellido: string;
-            id_profesor: number;
-            activo: boolean;
-            fecha_nacimiento: Date | null;
-            cuil: string;
+            fecha_nacimiento: string | null;
             direccion: string | null;
             localidad: string | null;
             distrito: string | null;
@@ -41,9 +37,29 @@ export declare class UsersController {
     }[]>;
     create(createUserDto: CreateUserDto): Promise<{
         id_usuario: number;
-        dni: string;
-        nombre: string | null;
-        apellido: string | null;
+        username: string;
+        rol: {
+            id_rol: number;
+            nombre: string;
+            descripcion: string | null;
+        };
+        personal: {
+            id_personal: number;
+            activo: boolean;
+            dni: string;
+            cuil: string;
+            nombre: string;
+            apellido: string;
+            fecha_nacimiento: string | null;
+            direccion: string | null;
+            localidad: string | null;
+            distrito: string | null;
+            mail_abc: string | null;
+            mail_personal: string | null;
+            telefono: string | null;
+            titulo_habilitante: string | null;
+            titulo_docente: boolean | null;
+        } | null;
     }>;
     updateStatus(id: number, activo: boolean): Promise<{
         id_usuario: number;
@@ -52,8 +68,8 @@ export declare class UsersController {
     updateRole(id: number, id_rol: number): Promise<{
         id_usuario: number;
         rol: {
-            nombre: string;
             id_rol: number;
+            nombre: string;
             descripcion: string | null;
         };
     }>;

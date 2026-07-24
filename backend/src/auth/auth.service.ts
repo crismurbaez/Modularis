@@ -10,9 +10,9 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async login(dni: string, pass: string) {
+  async login(username: string, pass: string) {
     const user = await this.prisma.usuario.findUnique({
-      where: { dni },
+      where: { username },
       include: {
         rol: {
           include: {
@@ -40,17 +40,16 @@ export class AuthService {
 
     const payload = { 
       sub: user.id_usuario, 
-      dni: user.dni,
+      username: user.username,
       rol: user.rol.nombre,
       permisos: permissions,
-      id_profesor: user.id_profesor
+      id_personal: user.id_personal
     };
 
     return {
       access_token: await this.jwtService.signAsync(payload),
       user: {
-        nombre: user.nombre,
-        apellido: user.apellido,
+        username: user.username,
         rol: user.rol.nombre,
         permisos: permissions
       }

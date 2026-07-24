@@ -4,10 +4,10 @@ import { ApiTags, ApiOperation, ApiResponse, ApiProperty } from '@nestjs/swagger
 import { IsString, IsNotEmpty } from 'class-validator';
 
 export class LoginDto {
-  @ApiProperty({ example: '00000000', description: 'El DNI del usuario' })
+  @ApiProperty({ example: 'admin', description: 'El nombre de usuario' })
   @IsString()
   @IsNotEmpty()
-  dni: string;
+  username: string;
 
   @ApiProperty({ example: '123456', description: 'La contraseña del usuario' })
   @IsString()
@@ -26,6 +26,6 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Login exitoso, devuelve JWT' })
   @ApiResponse({ status: 401, description: 'Credenciales inválidas' })
   login(@Body() signInDto: LoginDto) {
-    return this.authService.login(signInDto.dni, signInDto.password);
+    return this.authService.login(signInDto.username, signInDto.password);
   }
 }

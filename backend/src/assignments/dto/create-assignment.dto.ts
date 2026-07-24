@@ -2,13 +2,13 @@ import { IsString, IsInt, IsOptional, IsNumber, IsDateString, Matches, ValidateI
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateAssignmentDto {
-  @ApiProperty({ example: 1, description: 'ID del profesor' })
+  @ApiProperty({ example: 1, description: 'ID del personal' })
   @IsInt()
-  id_profesor: number;
+  id_personal: number;
 
-  @ApiProperty({ example: '1234567', description: 'Código CUPOF de la materia' })
-  @IsString()
-  cupof: string;
+  @ApiProperty({ example: 1, description: 'ID de la materia' })
+  @IsInt()
+  id_materia: number;
 
   @ApiProperty({ example: '1A', description: 'Curso o sección asignada' })
   @IsString()

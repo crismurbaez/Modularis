@@ -1,6 +1,6 @@
 import { AuthService } from './auth.service';
 export declare class LoginDto {
-    dni: string;
+    username: string;
     password: string;
 }
 export declare class AuthController {
@@ -9,8 +9,7 @@ export declare class AuthController {
     login(signInDto: LoginDto): Promise<{
         access_token: string;
         user: {
-            nombre: string | null;
-            apellido: string | null;
+            username: string;
             rol: string;
             permisos: string[];
         };

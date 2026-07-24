@@ -3,25 +3,33 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { UpdateAssignmentDto } from './dto/update-assignment.dto';
 import { Prisma } from '@prisma/client';
+import { CryptoService } from '../crypto/crypto.service';
 
 @Injectable()
 export class AssignmentsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private cryptoService: CryptoService
+  ) {}
 
   async create(createAssignmentDto: CreateAssignmentDto) {
-    const { id_situacion_revista, cuil_profesor_reemplazado, nota_desempeno, fundamentacion_baja_nota, ...rest } = createAssignmentDto;
+    const { id_situacion_revista, cuil_profesor_reemplazado, nota_desempeno, fundamentacion_baja_nota, id_personal, id_materia, ...rest } = createAssignmentDto as any;
+
+    const cuilReemplazado = id_situacion_revista === 3 ? cuil_profesor_reemplazado : null;
+    
+    if (id_situacion_revista === 3 && !cuilReemplazado) {
+      throw new BadRequestException('El CUIL del profesor reemplazado es obligatorio para suplencias');
+    }
 
     const data: Prisma.DesignacionUncheckedCreateInput = {
       ...rest,
+      id_personal,
+      id_materia,
       id_situacion_revista,
-      cuil_profesor_reemplazado: id_situacion_revista === 3 ? cuil_profesor_reemplazado : null,
+      cuil_profesor_reemplazado: cuilReemplazado ? this.cryptoService.encrypt(cuilReemplazado) : null,
       nota_desempeno: nota_desempeno ?? null,
       fundamentacion_baja_nota: (nota_desempeno !== null && nota_desempeno !== undefined && nota_desempeno < 6) ? fundamentacion_baja_nota : null,
     };
-
-    if (id_situacion_revista === 3 && !data.cuil_profesor_reemplazado) {
-      throw new BadRequestException('El CUIL del profesor reemplazado es obligatorio para suplencias');
-    }
 
     if (nota_desempeno !== undefined && nota_desempeno !== null) {
       if (nota_desempeno < 1 || nota_desempeno > 10) {
@@ -35,25 +43,47 @@ export class AssignmentsService {
     if (data.fecha_posesion) data.fecha_posesion = new Date(data.fecha_posesion as any);
     if (data.fecha_cese) data.fecha_cese = new Date(data.fecha_cese as any);
 
-    return this.prisma.extended.designacion.create({ data });
+    if (data.fecha_posesion) data.fecha_posesion = new Date(data.fecha_posesion as any);
+    if (data.fecha_cese) data.fecha_cese = new Date(data.fecha_cese as any);
+
+    const created = await this.prisma.designacion.create({ data });
+    if (created.cuil_profesor_reemplazado) {
+      created.cuil_profesor_reemplazado = this.cryptoService.decrypt(created.cuil_profesor_reemplazado);
+    }
+    return created;
   }
 
-  findAll() {
-    return this.prisma.extended.designacion.findMany();
-  }
-
-  findOne(id: number) {
-    return this.prisma.extended.designacion.findUnique({
-      where: { id_designacion: id },
+  async findAll() {
+    const designaciones = await this.prisma.designacion.findMany();
+    return designaciones.map(d => {
+      if (d.cuil_profesor_reemplazado) d.cuil_profesor_reemplazado = this.cryptoService.decrypt(d.cuil_profesor_reemplazado);
+      return d;
     });
   }
 
+  async findOne(id: number) {
+    const designacion = await this.prisma.designacion.findUnique({
+      where: { id_designacion: id },
+    });
+    if (designacion && designacion.cuil_profesor_reemplazado) {
+      designacion.cuil_profesor_reemplazado = this.cryptoService.decrypt(designacion.cuil_profesor_reemplazado);
+    }
+    return designacion;
+  }
+
   async update(id: number, updateAssignmentDto: UpdateAssignmentDto) {
-    const current = await this.prisma.extended.designacion.findUnique({ where: { id_designacion: id } });
+    const current = await this.prisma.designacion.findUnique({ where: { id_designacion: id } });
     if (!current) throw new NotFoundException('Designación no encontrada');
 
     let finalSit = updateAssignmentDto.id_situacion_revista ?? current.id_situacion_revista;
-    let finalCuil = (updateAssignmentDto.cuil_profesor_reemplazado !== undefined) ? updateAssignmentDto.cuil_profesor_reemplazado : current.cuil_profesor_reemplazado;
+    let finalCuil: string | null = null;
+    
+    if (updateAssignmentDto.cuil_profesor_reemplazado !== undefined) {
+      finalCuil = updateAssignmentDto.cuil_profesor_reemplazado as string;
+    } else if (current.cuil_profesor_reemplazado) {
+      finalCuil = this.cryptoService.decrypt(current.cuil_profesor_reemplazado);
+    }
+
     let finalNota = (updateAssignmentDto.nota_desempeno !== undefined) ? updateAssignmentDto.nota_desempeno : current.nota_desempeno;
     let finalFundamentacion = (updateAssignmentDto.fundamentacion_baja_nota !== undefined) ? updateAssignmentDto.fundamentacion_baja_nota : current.fundamentacion_baja_nota;
 
@@ -74,9 +104,9 @@ export class AssignmentsService {
     }
 
     const data: Prisma.DesignacionUncheckedUpdateInput = {
-      ...updateAssignmentDto,
+      ...updateAssignmentDto as any,
       id_situacion_revista: finalSit,
-      cuil_profesor_reemplazado: finalCuil,
+      cuil_profesor_reemplazado: finalCuil ? this.cryptoService.encrypt(finalCuil) : null,
       nota_desempeno: finalNota,
       fundamentacion_baja_nota: finalFundamentacion,
     };
@@ -84,9 +114,14 @@ export class AssignmentsService {
     if (data.fecha_posesion) data.fecha_posesion = new Date(data.fecha_posesion as any);
     if (data.fecha_cese) data.fecha_cese = new Date(data.fecha_cese as any);
 
-    return this.prisma.extended.designacion.update({
+    const updated = await this.prisma.designacion.update({
       where: { id_designacion: id },
       data,
     });
+
+    if (updated.cuil_profesor_reemplazado) {
+      updated.cuil_profesor_reemplazado = this.cryptoService.decrypt(updated.cuil_profesor_reemplazado);
+    }
+    return updated;
   }
 }

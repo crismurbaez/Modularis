@@ -16,15 +16,15 @@ class CreateAssignmentDto {
 }
 exports.CreateAssignmentDto = CreateAssignmentDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 1, description: 'ID del profesor' }),
+    (0, swagger_1.ApiProperty)({ example: 1, description: 'ID del personal' }),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
-], CreateAssignmentDto.prototype, "id_profesor", void 0);
+], CreateAssignmentDto.prototype, "id_personal", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: '1234567', description: 'Código CUPOF de la materia' }),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateAssignmentDto.prototype, "cupof", void 0);
+    (0, swagger_1.ApiProperty)({ example: 1, description: 'ID de la materia' }),
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], CreateAssignmentDto.prototype, "id_materia", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: '1A', description: 'Curso o sección asignada' }),
     (0, class_validator_1.IsString)(),

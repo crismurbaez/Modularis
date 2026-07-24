@@ -7,35 +7,25 @@ import { ApiTags, ApiBearerAuth, ApiOperation, ApiProperty, ApiPropertyOptional 
 import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateUserDto {
-  @ApiProperty({ example: '12345678', description: 'DNI del usuario' })
+  @ApiProperty({ example: 'admin', description: 'Nombre de usuario' })
   @IsString()
   @IsNotEmpty()
-  dni: string;
+  username: string;
 
   @ApiProperty({ example: '123456', description: 'Contraseña del usuario' })
   @IsString()
   @IsNotEmpty()
   password: string;
 
-  @ApiProperty({ example: 'Juan', description: 'Nombre del usuario' })
-  @IsString()
-  @IsNotEmpty()
-  nombre: string;
-
-  @ApiProperty({ example: 'Pérez', description: 'Apellido del usuario' })
-  @IsString()
-  @IsNotEmpty()
-  apellido: string;
-
   @ApiProperty({ example: 1, description: 'ID del rol del usuario' })
   @IsNumber()
   @IsNotEmpty()
   id_rol: number;
 
-  @ApiPropertyOptional({ example: 2, description: 'ID del profesor asociado (opcional)' })
+  @ApiPropertyOptional({ example: 2, description: 'ID del personal asociado (opcional)' })
   @IsNumber()
   @IsOptional()
-  id_profesor?: number;
+  id_personal?: number;
 }
 
 @ApiTags('users')

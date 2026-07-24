@@ -11,7 +11,7 @@ model Orientacion {
   nombre         String  @db.VarChar(100)
   detalle        String? @db.VarChar(200)
 
-  materias_cupof MateriaCupof[]
+  materias Materia[]
 
   @@map("orientaciones")
 }
@@ -20,6 +20,8 @@ model CursoSeccion {
   id_curso_seccion Int     @id @default(autoincrement())
   nombre           String  @db.VarChar(100)
   detalle          String? @db.VarChar(200)
+
+  estados_asistencia EstadoAsistenciaCurso[]
 
   @@map("curso_seccion")
 }
@@ -54,6 +56,36 @@ model MotivoBajaAlumno {
   @@map("motivo_baja_alumnos")
 }
 
+model CondicionMateria {
+  id_condicion Int     @id @default(autoincrement())
+  nombre       String  @db.VarChar(100)
+  detalle      String? @db.VarChar(200)
+
+  cursadas CursadaNota[]
+
+  @@map("condicion_materia")
+}
+
+model CausaInasistenciaAlumnos {
+  id_causa Int     @id @default(autoincrement())
+  nombre   String  @db.VarChar(50)
+  detalle  String? @db.Text
+
+  inasistencias InasistenciaAlumno[]
+
+  @@map("causa_inasistencia_alumnos")
+}
+
+model MotivoInasistenciasDocentes {
+  id_motivo Int     @id @default(autoincrement())
+  nombre    String  @db.VarChar(100)
+  detalle   String? @db.Text
+
+  inasistencias InasistenciasDiariasDocentes[]
+
+  @@map("motivo_inasistencias_docentes")
+}
+
 model LimitesCalificacionAlumnos {
   limite_superior Int
   limite_inferior Int
@@ -75,23 +107,24 @@ model LimitesCalificacionDocentes {
 // ==========================================
 
 model Rol {
-  id_rol      Int          @id @default(autoincrement())
-  nombre      String       @unique @db.VarChar(50)
-  descripcion String?      @db.VarChar(200)
-  
-  usuarios    Usuario[]
-  permisos    RolPermiso[]
+  id_rol      Int     @id @default(autoincrement())
+  nombre      String  @unique @db.VarChar(50)
+  descripcion String? @db.VarChar(200)
+
+  usuarios       Usuario[]
+  permisos       RolPermiso[]
+  notificaciones Notificacion[]
 
   @@map("roles")
 }
 
 model Permiso {
-  id_permiso  Int          @id @default(autoincrement())
-  codigo      String       @unique @db.VarChar(100)
-  modulo      String       @db.VarChar(100)
-  descripcion String?      @db.VarChar(200)
+  id_permiso  Int     @id @default(autoincrement())
+  codigo      String  @unique @db.VarChar(100)
+  modulo      String  @db.VarChar(100)
+  descripcion String? @db.VarChar(200)
 
-  roles       RolPermiso[]
+  roles RolPermiso[]
 
   @@map("permisos")
 }
@@ -100,78 +133,82 @@ model RolPermiso {
   id_rol     Int
   id_permiso Int
 
-  rol        Rol     @relation(fields: [id_rol], references: [id_rol], onDelete: Cascade)
-  permiso    Permiso @relation(fields: [id_permiso], references: [id_permiso], onDelete: Cascade)
+  rol     Rol     @relation(fields: [id_rol], references: [id_rol], onDelete: Cascade)
+  permiso Permiso @relation(fields: [id_permiso], references: [id_permiso], onDelete: Cascade)
 
   @@id([id_rol, id_permiso])
   @@map("rol_permisos")
 }
 
-model Usuario {
-  id_usuario    Int       @id @default(autoincrement())
-  dni           String    @unique @db.VarChar(255)
-  password_hash String    @db.VarChar(255)
-  nombre        String?   @db.VarChar(150)
-  apellido      String?   @db.VarChar(150)
-  id_rol        Int
-  id_profesor   Int?
-  activo        Boolean   @default(true)
+model PersonalDocente {
+  id_personal        Int      @id @default(autoincrement())
+  dni                String   @unique @db.VarChar(255)
+  nombre             String   @db.VarChar(150)
+  apellido           String   @db.VarChar(150)
+  cuil               String   @unique @db.VarChar(255)
+  fecha_nacimiento   String?  @db.VarChar(255) // Changed to String for encryption
+  direccion          String?  @db.VarChar(255)
+  localidad          String?  @db.VarChar(255)
+  distrito           String?  @db.VarChar(100)
+  mail_abc           String?  @db.VarChar(255)
+  mail_personal      String?  @db.VarChar(255)
+  telefono           String?  @db.VarChar(255)
+  titulo_habilitante String?  @db.VarChar(150)
+  titulo_docente     Boolean? @default(false)
+  activo             Boolean  @default(true)
 
-  rol           Rol       @relation(fields: [id_rol], references: [id_rol])
-  profesor      Profesor? @relation(fields: [id_profesor], references: [id_profesor])
+  designaciones Designacion[]
+  inasistencias InasistenciasDiariasDocentes[]
+  usuarios      Usuario[]
+
+  @@map("personal_docente")
+}
+
+model Usuario {
+  id_usuario    Int     @id @default(autoincrement())
+  username      String  @unique @db.VarChar(255)
+  password_hash String  @db.VarChar(255)
+  id_rol        Int
+  id_personal   Int?
+  activo        Boolean @default(true)
+
+  rol                Rol                     @relation(fields: [id_rol], references: [id_rol])
+  personal           PersonalDocente?        @relation(fields: [id_personal], references: [id_personal], onDelete: SetNull)
+  notificaciones     Notificacion[]
+  estados_asistencia EstadoAsistenciaCurso[]
+  historial_cambios  HistorialCambios[]
 
   @@map("usuarios")
 }
 
-model Profesor {
-  id_profesor       Int       @id @default(autoincrement())
-  dni               String    @unique @db.VarChar(255) // Increased length for encryption
-  nombre            String    @db.VarChar(255) // Increased length for encryption
-  apellido          String    @db.VarChar(255) // Increased length for encryption
-  cuil              String    @db.VarChar(20)
-  fecha_nacimiento  DateTime? @db.Date
-  direccion         String?   @db.VarChar(200)
-  localidad         String?   @db.VarChar(100)
-  distrito          String?   @db.VarChar(100)
-  mail_abc          String?   @db.VarChar(120)
-  mail_personal     String?   @db.VarChar(120)
-  telefono          String?   @db.VarChar(30)
-  titulo_habilitante String?  @db.VarChar(150)
-  titulo_docente    Boolean?  @default(false)
-  activo            Boolean   @default(true)
-
-  designaciones          Designacion[]
-  inasistencias_docentes InasistenciaDocente[]
-  usuarios               Usuario[]
-
-  @@map("profesores")
-}
-
 model Alumno {
-  id_alumno             Int       @id @default(autoincrement())
-  dni                   String    @unique @db.VarChar(255) // Increased length for encryption
-  nombre                String    @db.VarChar(255) // Increased length for encryption
-  apellido              String    @db.VarChar(255) // Increased length for encryption
-  fecha_nacimiento      DateTime? @db.Date
+  id_alumno             Int      @id @default(autoincrement())
+  dni                   String   @unique @db.VarChar(255)
+  cuil                  String   @unique @db.VarChar(255)
+  nombre                String   @db.VarChar(150)
+  apellido              String   @db.VarChar(150)
+  fecha_nacimiento      String?  @db.VarChar(255) // Changed to string for encryption consistency
   edad                  Int?
-  lugar_nacimiento      String?   @db.VarChar(120)
-  nacionalidad          String?   @db.VarChar(80)
-  primaria_origen       String?   @db.VarChar(150)
-  secundario_incompleto String?   @db.VarChar(150) // User modification respected
-  analitico_parcial     Boolean?  @default(false)
+  lugar_nacimiento      String?  @db.VarChar(120)
+  nacionalidad          String?  @db.VarChar(80)
+  primaria_origen       String?  @db.VarChar(150)
+  secundario_incompleto String?  @db.VarChar(150)
+  analitico_parcial     Boolean? @default(false)
 
   id_estado      Int?
   id_motivo_baja Int?
 
-  estado      EstadoAlumno?     @relation(fields: [id_estado], references: [id_estado])
-  motivo_baja MotivoBajaAlumno? @relation(fields: [id_motivo_baja], references: [id_motivo_baja])
-  cursadas    CursadaNota[]
+  estado        EstadoAlumno?        @relation(fields: [id_estado], references: [id_estado])
+  motivo_baja   MotivoBajaAlumno?    @relation(fields: [id_motivo_baja], references: [id_motivo_baja])
+  cursadas      CursadaNota[]
+  inasistencias InasistenciaAlumno[]
 
   @@map("alumnos")
 }
 
-model MateriaCupof {
-  cupof          String  @id @db.VarChar(50)
+model Materia {
+  id_materia     Int     @id @default(autoincrement())
+  cupof          String? @db.VarChar(50)
   materia_nombre String  @db.VarChar(150)
   area           String? @db.VarChar(100)
   modulo         String? @db.VarChar(50)
@@ -185,57 +222,141 @@ model MateriaCupof {
   designaciones Designacion[]
   cursadas      CursadaNota[]
 
-  @@map("materias_cupof")
+  @@map("materias")
+}
+
+model DatosInstitucion {
+  id_datos        Int     @id @default(autoincrement())
+  nombre_completo String? @db.VarChar(150)
+  nombre_siglas   String? @db.VarChar(50)
+  numero          String? @db.VarChar(50)
+  descripcion     String? @db.Text
+  direccion       String? @db.VarChar(200)
+  localidad       String? @db.VarChar(100)
+  distrito        String? @db.VarChar(100)
+  mail            String? @db.VarChar(120)
+  icono           String? @db.VarChar(255)
+  imagen_sello    String? @db.VarChar(255)
+  telefono        String? @db.VarChar(50)
+  cue             String? @db.VarChar(20)
+
+  @@map("datos_institucion")
+}
+
+model CalendarioAcademico {
+  id_calendario Int       @id @default(autoincrement())
+  evento        String    @db.VarChar(150)
+  fecha_inicio  DateTime  @db.Date
+  fecha_fin     DateTime? @db.Date
+
+  @@map("calendario_academico")
+}
+
+model Notificacion {
+  id_notificacion Int       @id @default(autoincrement())
+  id_usuario      Int?
+  id_rol          Int?
+  titulo          String    @db.VarChar(150)
+  mensaje         String    @db.Text
+  tipo            String    @db.VarChar(50)
+  leida           Boolean?  @default(false)
+  fecha_creacion  DateTime? @default(now()) @db.Timestamp()
+
+  usuario Usuario? @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
+  rol     Rol?     @relation(fields: [id_rol], references: [id_rol], onDelete: Cascade)
+
+  @@map("notificaciones")
+}
+
+model HistorialCambios {
+  id_historial Int       @id @default(autoincrement())
+  fecha        DateTime? @default(now()) @db.Timestamp()
+  modulo       String    @db.VarChar(100)
+  detalle      String    @db.Text
+  id_usuario   Int?
+
+  usuario Usuario? @relation(fields: [id_usuario], references: [id_usuario], onDelete: SetNull)
+
+  @@map("historial_cambios")
 }
 
 model Designacion {
   id_designacion            Int       @id @default(autoincrement())
-  id_profesor               Int
-  cupof                     String    @db.VarChar(50)
+  id_personal               Int
+  id_materia                Int
+  cupof                     String?   @db.VarChar(50)
   curso_seccion             String?   @db.VarChar(50)
   fecha_posesion            DateTime? @db.Date
   fecha_cese                DateTime? @db.Date
   id_situacion_revista      Int?
-  cuil_profesor_reemplazado String?   @db.VarChar(20)
-  nota_desempeno            Decimal?  @map("nota_desempeño") @db.Decimal(4, 2)
-  fundamentacion_baja_nota  String?   @db.Text // Added based on business rules
+  cuil_profesor_reemplazado String?   @db.VarChar(255) // For encryption
+  nota_desempeno            Decimal?  @map("nota_desempeno") @db.Decimal(4, 2)
+  fundamentacion_baja_nota  String?   @db.Text
 
-  profesor          Profesor                 @relation(fields: [id_profesor], references: [id_profesor], onDelete: Cascade)
-  materia           MateriaCupof             @relation(fields: [cupof], references: [cupof], onDelete: Cascade)
+  personal          PersonalDocente          @relation(fields: [id_personal], references: [id_personal], onDelete: Cascade)
+  materia           Materia                  @relation(fields: [id_materia], references: [id_materia], onDelete: Cascade)
   situacion_revista SituacionRevistaDocente? @relation(fields: [id_situacion_revista], references: [id_situacion_revista])
 
   @@map("designaciones")
 }
 
 model CursadaNota {
-  id_cursada        Int     @id @default(autoincrement())
-  id_alumno         Int
-  cupof             String  @db.VarChar(50)
-  ciclo_lectivo     Int
-  nota_cuat1        String? @db.VarChar(15)
-  faltas_cuat1      Int?    @default(0)
-  nota_cuat2        String? @db.VarChar(15)
-  faltas_cuat2      Int?    @default(0)
-  condicion_materia String? @db.VarChar(80)
-  mes_acreditacion  String? @db.VarChar(30)
-  anio_acreditacion Int?
+  id_cursada           Int     @id @default(autoincrement())
+  id_alumno            Int
+  id_materia           Int
+  ciclo_lectivo        Int
+  nota_cuat1           String? @db.VarChar(15)
+  faltas_cuat1         Int?    @default(0)
+  nota_cuat2           String? @db.VarChar(15)
+  faltas_cuat2         Int?    @default(0)
+  id_condicion_materia Int?
+  nota_final           String? @db.VarChar(15)
+  mes_acreditacion     String? @db.VarChar(30)
+  anio_acreditacion    Int?
 
-  alumno  Alumno       @relation(fields: [id_alumno], references: [id_alumno], onDelete: Cascade)
-  materia MateriaCupof @relation(fields: [cupof], references: [cupof], onDelete: Cascade)
+  alumno    Alumno            @relation(fields: [id_alumno], references: [id_alumno], onDelete: Cascade)
+  materia   Materia           @relation(fields: [id_materia], references: [id_materia], onDelete: Cascade)
+  condicion CondicionMateria? @relation(fields: [id_condicion_materia], references: [id_condicion])
 
   @@map("cursadas_notas")
 }
 
-model InasistenciaDocente {
-  id_asistencia_doc     Int    @id @default(autoincrement())
-  id_profesor           Int
-  periodo_calificacion  String @db.VarChar(50)
-  faltas_enfermedad     Int?   @default(0)
-  faltas_causas_priv    Int?   @default(0)
-  faltas_otras_causas   Int?   @default(0)
-  faltas_injustificadas Int?   @default(0)
+model InasistenciasDiariasDocentes {
+  id_inasistencia Int      @id @default(autoincrement())
+  id_personal     Int
+  fecha           DateTime @db.Date
+  id_motivo       Int?
+  observaciones   String?  @db.Text
 
-  profesor Profesor @relation(fields: [id_profesor], references: [id_profesor], onDelete: Cascade)
+  personal PersonalDocente              @relation(fields: [id_personal], references: [id_personal], onDelete: Cascade)
+  motivo   MotivoInasistenciasDocentes? @relation(fields: [id_motivo], references: [id_motivo])
 
-  @@map("inasistencias_docentes")
+  @@map("inasistencias_diarias_docentes")
+}
+
+model InasistenciaAlumno {
+  id_inasistencia Int      @id @default(autoincrement())
+  id_alumno       Int
+  fecha           DateTime @db.Date
+  id_causa        Int
+  observaciones   String?  @db.Text
+
+  alumno Alumno                   @relation(fields: [id_alumno], references: [id_alumno], onDelete: Cascade)
+  causa  CausaInasistenciaAlumnos @relation(fields: [id_causa], references: [id_causa])
+
+  @@unique([id_alumno, fecha])
+  @@map("inasistencia_alumnos")
+}
+
+model EstadoAsistenciaCurso {
+  id_estado        Int      @id @default(autoincrement())
+  id_curso_seccion Int
+  fecha            DateTime @db.Date
+  id_usuario       Int
+
+  curso   CursoSeccion @relation(fields: [id_curso_seccion], references: [id_curso_seccion], onDelete: Cascade)
+  usuario Usuario      @relation(fields: [id_usuario], references: [id_usuario], onDelete: Cascade)
+
+  @@unique([id_curso_seccion, fecha])
+  @@map("estado_asistencia_curso")
 }

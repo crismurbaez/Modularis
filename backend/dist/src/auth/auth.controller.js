@@ -21,11 +21,11 @@ class LoginDto {
 }
 exports.LoginDto = LoginDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: '00000000', description: 'El DNI del usuario' }),
+    (0, swagger_1.ApiProperty)({ example: 'admin', description: 'El nombre de usuario' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], LoginDto.prototype, "dni", void 0);
+], LoginDto.prototype, "username", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: '123456', description: 'La contraseña del usuario' }),
     (0, class_validator_1.IsString)(),
@@ -37,7 +37,7 @@ let AuthController = class AuthController {
         this.authService = authService;
     }
     login(signInDto) {
-        return this.authService.login(signInDto.dni, signInDto.password);
+        return this.authService.login(signInDto.username, signInDto.password);
     }
 };
 exports.AuthController = AuthController;

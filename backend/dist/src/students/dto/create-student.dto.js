@@ -21,6 +21,10 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
+], CreateStudentDto.prototype, "cuil", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
 ], CreateStudentDto.prototype, "nombre", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),

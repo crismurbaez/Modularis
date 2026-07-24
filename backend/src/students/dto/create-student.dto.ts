@@ -5,6 +5,9 @@ export class CreateStudentDto {
   dni: string;
 
   @IsString()
+  cuil: string;
+
+  @IsString()
   nombre: string;
 
   @IsString()

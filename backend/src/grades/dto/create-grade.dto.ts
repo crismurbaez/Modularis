@@ -7,9 +7,9 @@ export class CreateGradeDto {
   @IsInt()
   id_alumno: number;
 
-  @ApiProperty({ example: 'CUP-12345', description: 'Código CUPOF de la materia' })
-  @IsString()
-  cupof: string;
+  @ApiProperty({ example: 1, description: 'ID de la materia' })
+  @IsInt()
+  id_materia: number;
 
   @ApiProperty({ example: 2024, description: 'Ciclo lectivo (año)' })
   @IsInt()
@@ -35,10 +35,10 @@ export class CreateGradeDto {
   @IsInt()
   faltas_cuat2?: number;
 
-  @ApiPropertyOptional({ example: 'APROBADO', description: 'Condición final de la materia' })
+  @ApiPropertyOptional({ example: 1, description: 'ID de la condición final de la materia (1=APROBADO, 2=PENDIENTE)' })
   @IsOptional()
-  @IsString()
-  condicion_materia?: string;
+  @IsInt()
+  id_condicion_materia?: number;
 
   @ApiPropertyOptional({ example: 'Diciembre', description: 'Mes en que se acreditó la materia' })
   @IsOptional()

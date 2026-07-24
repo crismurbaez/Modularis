@@ -24,11 +24,11 @@ class CreateUserDto {
 }
 exports.CreateUserDto = CreateUserDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: '12345678', description: 'DNI del usuario' }),
+    (0, swagger_1.ApiProperty)({ example: 'admin', description: 'Nombre de usuario' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], CreateUserDto.prototype, "dni", void 0);
+], CreateUserDto.prototype, "username", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: '123456', description: 'Contraseña del usuario' }),
     (0, class_validator_1.IsString)(),
@@ -36,29 +36,17 @@ __decorate([
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "password", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Juan', description: 'Nombre del usuario' }),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], CreateUserDto.prototype, "nombre", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Pérez', description: 'Apellido del usuario' }),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], CreateUserDto.prototype, "apellido", void 0);
-__decorate([
     (0, swagger_1.ApiProperty)({ example: 1, description: 'ID del rol del usuario' }),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
 ], CreateUserDto.prototype, "id_rol", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 2, description: 'ID del profesor asociado (opcional)' }),
+    (0, swagger_1.ApiPropertyOptional)({ example: 2, description: 'ID del personal asociado (opcional)' }),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
-], CreateUserDto.prototype, "id_profesor", void 0);
+], CreateUserDto.prototype, "id_personal", void 0);
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;

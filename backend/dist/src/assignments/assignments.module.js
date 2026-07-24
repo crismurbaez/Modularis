@@ -10,11 +10,13 @@ exports.AssignmentsModule = void 0;
 const common_1 = require("@nestjs/common");
 const assignments_controller_1 = require("./assignments.controller");
 const assignments_service_1 = require("./assignments.service");
+const crypto_module_1 = require("../crypto/crypto.module");
 let AssignmentsModule = class AssignmentsModule {
 };
 exports.AssignmentsModule = AssignmentsModule;
 exports.AssignmentsModule = AssignmentsModule = __decorate([
     (0, common_1.Module)({
+        imports: [crypto_module_1.CryptoModule],
         controllers: [assignments_controller_1.AssignmentsController],
         providers: [assignments_service_1.AssignmentsService]
     })

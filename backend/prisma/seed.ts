@@ -16,9 +16,10 @@ async function main() {
 
   await prisma.rol.createMany({
     data: [
-      { id_rol: 1, nombre: 'DIRECTOR', descripcion: 'Control total del sistema' },
-      { id_rol: 2, nombre: 'PRECEPTOR', descripcion: 'Gestión de asistencia y alumnos' },
-      { id_rol: 3, nombre: 'PROFESOR', descripcion: 'Carga de calificaciones' },
+      { id_rol: 1, nombre: 'SUPERADMIN', descripcion: 'Programador y emergencias (Oculto)' },
+      { id_rol: 2, nombre: 'DIRECTOR', descripcion: 'Control total del sistema' },
+      { id_rol: 3, nombre: 'PRECEPTOR', descripcion: 'Gestión de asistencia y alumnos' },
+      { id_rol: 4, nombre: 'PROFESOR', descripcion: 'Carga de calificaciones' },
     ],
     skipDuplicates: true,
   });
@@ -35,28 +36,48 @@ async function main() {
 
   await prisma.rolPermiso.createMany({
     data: [
-      { id_rol: 1, id_permiso: 1 }, // Director -> Acceso Total
-      { id_rol: 2, id_permiso: 3 }, // Preceptor -> Modificar Asistencia
-      { id_rol: 3, id_permiso: 2 }, // Profesor -> Modificar Calificaciones
+      { id_rol: 1, id_permiso: 1 }, // Superadmin -> Acceso Total
+      { id_rol: 2, id_permiso: 1 }, // Director -> Acceso Total
+      { id_rol: 3, id_permiso: 3 }, // Preceptor -> Modificar Asistencia
+      { id_rol: 4, id_permiso: 2 }, // Profesor -> Modificar Calificaciones
     ],
     skipDuplicates: true,
   });
 
-  // Hash de la contraseña '123456' para el usuario inicial
   const passwordHash = await bcrypt.hash('123456', 10);
 
+  // 1. Superusuario oculto (sin id_personal)
   await prisma.usuario.upsert({
+    where: { username: 'superadmin' },
+    update: {},
+    create: {
+      username: 'superadmin',
+      password_hash: passwordHash,
+      id_rol: 1,
+      activo: true,
+    },
+  });
+
+  // 2. Director inicial (Yanina)
+  const yaninaPersonal = await prisma.personalDocente.upsert({
     where: { dni: '00000000' },
-    update: {
+    update: {},
+    create: {
+      dni: '00000000',
+      cuil: '27000000000',
       nombre: 'Yanina',
       apellido: 'Poncela',
     },
+  });
+
+  await prisma.usuario.upsert({
+    where: { username: '00000000' },
+    update: {},
     create: {
-      dni: '00000000',
+      username: '00000000',
       password_hash: passwordHash,
-      nombre: 'Yanina',
-      apellido: 'Poncela',
-      id_rol: 1, // Rol Director
+      id_rol: 2, // Director
+      id_personal: yaninaPersonal.id_personal,
       activo: true,
     },
   });
@@ -115,6 +136,35 @@ async function main() {
       { nombre: 'Socioeconómico', detalle: 'Dificultades familiares o de transporte' },
       { nombre: 'Contexto de Encierro - Libertad', detalle: 'Egreso por cumplimiento de condena o libertad condicional (Sedes Penales)' },
       { nombre: 'Desconocido', detalle: 'Ausencia prolongada sin justificación ni comunicación con el CENS' },
+      { nombre: 'MUERTE', detalle: 'Fallecimiento del estudiante' },
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.condicionMateria.createMany({
+    data: [
+      { nombre: 'APROBADO', detalle: 'Calificación mayor o igual a 4 en ambos cuatrimestres' },
+      { nombre: 'PENDIENTE', detalle: 'Calificación menor a 4 en algún cuatrimestre' },
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.causaInasistenciaAlumnos.createMany({
+    data: [
+      { nombre: 'VISITA', detalle: 'Inasistencia por visita de familiares' },
+      { nombre: 'COMPARENDO', detalle: 'Traslado al juzgado' },
+      { nombre: 'ENFERMEDAD', detalle: 'Inasistencia por motivos de salud' },
+      { nombre: 'INJUSTIFICADA', detalle: 'Falta sin motivo declarado' },
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.motivoInasistenciasDocentes.createMany({
+    data: [
+      { nombre: 'Enfermedad', detalle: 'Licencia médica' },
+      { nombre: 'Causas Privadas', detalle: 'Motivos personales justificados' },
+      { nombre: 'Otras Causas', detalle: 'Licencia gremial, maternidad, etc.' },
+      { nombre: 'Injustificada', detalle: 'Falta sin aviso ni justificación' },
     ],
     skipDuplicates: true,
   });
@@ -135,7 +185,7 @@ async function main() {
   });
 
   // 7. Materias desde codigos_pid_cupof.md (Orientación en Economía y Administración - C.E)
-  await prisma.materiaCupof.createMany({
+  await prisma.materia.createMany({
     data: [
       // 1º AÑO
       { cupof: '2741683', materia_nombre: 'Ciencias Sociales 1', area: 'CIENCIAS SOCIALES 1-2', modulo: 'Módulo 1', anio: 1, id_orientacion: 3, codigo_pid: 'JVW' },
