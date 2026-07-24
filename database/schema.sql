@@ -132,8 +132,7 @@ CREATE TABLE alumnos (
 );
 
 CREATE TABLE materias (
-    id_materia SERIAL PRIMARY KEY,
-    cupof VARCHAR(50), 
+    id_materia SERIAL PRIMARY KEY, 
     materia_nombre VARCHAR(150) NOT NULL,
     area VARCHAR(100),
     modulo VARCHAR(50),
@@ -176,6 +175,14 @@ CREATE TABLE notificaciones (
     tipo VARCHAR(50) NOT NULL,
     leida BOOLEAN DEFAULT FALSE,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabla para configuración dinámica de alertas
+CREATE TABLE configuracion_alertas (
+    id_config SERIAL PRIMARY KEY,
+    tipo_alerta VARCHAR(100) UNIQUE NOT NULL,
+    activa BOOLEAN DEFAULT TRUE,
+    parametros JSONB
 );
 
 CREATE TABLE historial_cambios (

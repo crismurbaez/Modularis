@@ -13,10 +13,12 @@ exports.AssignmentsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const crypto_service_1 = require("../crypto/crypto.service");
+const notifications_service_1 = require("../notifications/notifications.service");
 let AssignmentsService = class AssignmentsService {
-    constructor(prisma, cryptoService) {
+    constructor(prisma, cryptoService, notificationsService) {
         this.prisma = prisma;
         this.cryptoService = cryptoService;
+        this.notificationsService = notificationsService;
     }
     async create(createAssignmentDto) {
         const { id_situacion_revista, cuil_profesor_reemplazado, nota_desempeno, fundamentacion_baja_nota, id_personal, id_materia, ...rest } = createAssignmentDto;
@@ -54,14 +56,7 @@ let AssignmentsService = class AssignmentsService {
             where: { id_personal: created.id_personal }
         });
         if (usuarioAsignado) {
-            await this.prisma.notificacion.create({
-                data: {
-                    id_usuario: usuarioAsignado.id_usuario,
-                    titulo: 'Nueva Asignación de Materia',
-                    mensaje: `Se le ha asignado una nueva materia. Fecha de posesión: ${created.fecha_posesion?.toLocaleDateString()}`,
-                    tipo: 'INFORMATIVO'
-                }
-            });
+            await this.notificationsService.createAndSend(usuarioAsignado.id_usuario, 'Nueva Asignación de Materia', `Se le ha asignado una nueva materia. Fecha de posesión: ${created.fecha_posesion?.toLocaleDateString()}`);
         }
         if (created.cuil_profesor_reemplazado) {
             created.cuil_profesor_reemplazado = this.cryptoService.decrypt(created.cuil_profesor_reemplazado);
@@ -140,6 +135,7 @@ exports.AssignmentsService = AssignmentsService;
 exports.AssignmentsService = AssignmentsService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        crypto_service_1.CryptoService])
+        crypto_service_1.CryptoService,
+        notifications_service_1.NotificationsService])
 ], AssignmentsService);
 //# sourceMappingURL=assignments.service.js.map

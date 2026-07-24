@@ -1,8 +1,12 @@
 import { PrismaService } from '../prisma/prisma.service';
+import { MailerService } from '@nestjs-modules/mailer';
+import { CryptoService } from '../crypto/crypto.service';
 export declare class NotificationsService {
     private prisma;
+    private mailerService;
+    private cryptoService;
     private readonly logger;
-    constructor(prisma: PrismaService);
+    constructor(prisma: PrismaService, mailerService: MailerService, cryptoService: CryptoService);
     checkCierreNotas(): Promise<void>;
     checkInasistencias(): Promise<void>;
     findAll(): import(".prisma/client").Prisma.PrismaPromise<{
@@ -35,4 +39,15 @@ export declare class NotificationsService {
         fecha_creacion: Date | null;
         id_notificacion: number;
     }>;
+    createAndSend(id_usuario: number, titulo: string, mensaje: string, tipo?: string): Promise<{
+        id_usuario: number | null;
+        id_rol: number | null;
+        titulo: string;
+        mensaje: string;
+        tipo: string;
+        leida: boolean | null;
+        fecha_creacion: Date | null;
+        id_notificacion: number;
+    }>;
+    private sendEmail;
 }

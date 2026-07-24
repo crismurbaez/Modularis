@@ -7,11 +7,11 @@ export declare class InstitutionController {
         icono?: Express.Multer.File[];
         imagen_sello?: Express.Multer.File[];
     }): Promise<{
+        descripcion: string | null;
         direccion: string | null;
         localidad: string | null;
         distrito: string | null;
         telefono: string | null;
-        descripcion: string | null;
         nombre_completo: string | null;
         nombre_siglas: string | null;
         numero: string | null;
@@ -22,11 +22,11 @@ export declare class InstitutionController {
         imagen_sello: string | null;
     }>;
     findOne(): import(".prisma/client").Prisma.Prisma__DatosInstitucionClient<{
+        descripcion: string | null;
         direccion: string | null;
         localidad: string | null;
         distrito: string | null;
         telefono: string | null;
-        descripcion: string | null;
         nombre_completo: string | null;
         nombre_siglas: string | null;
         numero: string | null;

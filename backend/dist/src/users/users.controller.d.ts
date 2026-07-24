@@ -9,20 +9,20 @@ export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
     findAll(): Promise<{
-        id_usuario: number;
-        username: string;
-        activo: boolean;
         rol: {
             id_rol: number;
             nombre: string;
             descripcion: string | null;
         };
+        id_usuario: number;
+        username: string;
+        activo: boolean;
         personal: {
             id_personal: number;
             activo: boolean;
+            nombre: string;
             dni: string;
             cuil: string;
-            nombre: string;
             apellido: string;
             fecha_nacimiento: string | null;
             direccion: string | null;
@@ -36,19 +36,19 @@ export declare class UsersController {
         } | null;
     }[]>;
     create(createUserDto: CreateUserDto): Promise<{
-        id_usuario: number;
-        username: string;
         rol: {
             id_rol: number;
             nombre: string;
             descripcion: string | null;
         };
+        id_usuario: number;
+        username: string;
         personal: {
             id_personal: number;
             activo: boolean;
+            nombre: string;
             dni: string;
             cuil: string;
-            nombre: string;
             apellido: string;
             fecha_nacimiento: string | null;
             direccion: string | null;
@@ -66,11 +66,11 @@ export declare class UsersController {
         activo: boolean;
     }>;
     updateRole(id: number, id_rol: number): Promise<{
-        id_usuario: number;
         rol: {
             id_rol: number;
             nombre: string;
             descripcion: string | null;
         };
+        id_usuario: number;
     }>;
 }

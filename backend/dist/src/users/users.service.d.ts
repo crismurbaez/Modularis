@@ -3,20 +3,20 @@ export declare class UsersService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     findAll(): Promise<{
-        id_usuario: number;
-        username: string;
-        activo: boolean;
         rol: {
             id_rol: number;
             nombre: string;
             descripcion: string | null;
         };
+        id_usuario: number;
+        username: string;
+        activo: boolean;
         personal: {
             id_personal: number;
             activo: boolean;
+            nombre: string;
             dni: string;
             cuil: string;
-            nombre: string;
             apellido: string;
             fecha_nacimiento: string | null;
             direccion: string | null;
@@ -38,9 +38,9 @@ export declare class UsersService {
         personal: {
             id_personal: number;
             activo: boolean;
+            nombre: string;
             dni: string;
             cuil: string;
-            nombre: string;
             apellido: string;
             fecha_nacimiento: string | null;
             direccion: string | null;
@@ -61,19 +61,19 @@ export declare class UsersService {
         activo: boolean;
     }>;
     create(data: any): Promise<{
-        id_usuario: number;
-        username: string;
         rol: {
             id_rol: number;
             nombre: string;
             descripcion: string | null;
         };
+        id_usuario: number;
+        username: string;
         personal: {
             id_personal: number;
             activo: boolean;
+            nombre: string;
             dni: string;
             cuil: string;
-            nombre: string;
             apellido: string;
             fecha_nacimiento: string | null;
             direccion: string | null;
@@ -91,11 +91,11 @@ export declare class UsersService {
         activo: boolean;
     }>;
     updateRole(id: number, id_rol: number): Promise<{
-        id_usuario: number;
         rol: {
             id_rol: number;
             nombre: string;
             descripcion: string | null;
         };
+        id_usuario: number;
     }>;
 }

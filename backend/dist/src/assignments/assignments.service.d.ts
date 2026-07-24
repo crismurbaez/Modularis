@@ -3,10 +3,12 @@ import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { UpdateAssignmentDto } from './dto/update-assignment.dto';
 import { Prisma } from '@prisma/client';
 import { CryptoService } from '../crypto/crypto.service';
+import { NotificationsService } from '../notifications/notifications.service';
 export declare class AssignmentsService {
     private prisma;
     private cryptoService;
-    constructor(prisma: PrismaService, cryptoService: CryptoService);
+    private notificationsService;
+    constructor(prisma: PrismaService, cryptoService: CryptoService, notificationsService: NotificationsService);
     create(createAssignmentDto: CreateAssignmentDto): Promise<{
         id_personal: number;
         id_materia: number;

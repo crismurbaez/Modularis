@@ -4,12 +4,14 @@ import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { UpdateAssignmentDto } from './dto/update-assignment.dto';
 import { Prisma } from '@prisma/client';
 import { CryptoService } from '../crypto/crypto.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class AssignmentsService {
   constructor(
     private prisma: PrismaService,
-    private cryptoService: CryptoService
+    private cryptoService: CryptoService,
+    private notificationsService: NotificationsService
   ) {}
 
   async create(createAssignmentDto: CreateAssignmentDto) {
@@ -52,14 +54,11 @@ export class AssignmentsService {
       where: { id_personal: created.id_personal }
     });
     if (usuarioAsignado) {
-      await this.prisma.notificacion.create({
-        data: {
-          id_usuario: usuarioAsignado.id_usuario,
-          titulo: 'Nueva Asignación de Materia',
-          mensaje: `Se le ha asignado una nueva materia. Fecha de posesión: ${created.fecha_posesion?.toLocaleDateString()}`,
-          tipo: 'INFORMATIVO'
-        }
-      });
+      await this.notificationsService.createAndSend(
+        usuarioAsignado.id_usuario,
+        'Nueva Asignación de Materia',
+        `Se le ha asignado una nueva materia. Fecha de posesión: ${created.fecha_posesion?.toLocaleDateString()}`
+      );
     }
 
     if (created.cuil_profesor_reemplazado) {

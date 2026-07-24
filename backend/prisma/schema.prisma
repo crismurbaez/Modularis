@@ -207,8 +207,7 @@ model Alumno {
 }
 
 model Materia {
-  id_materia     Int     @id @default(autoincrement())
-  cupof          String? @db.VarChar(50)
+  id_materia     Int           @id @default(autoincrement())
   materia_nombre String  @db.VarChar(150)
   area           String? @db.VarChar(100)
   modulo         String? @db.VarChar(50)
@@ -270,14 +269,22 @@ model Notificacion {
 
 model HistorialCambios {
   id_historial Int       @id @default(autoincrement())
-  fecha        DateTime? @default(now()) @db.Timestamp()
-  modulo       String    @db.VarChar(100)
-  detalle      String    @db.Text
+  fecha        DateTime? @default(now()) @db.Timestamp(6)
+  modulo       String?   @db.VarChar(100)
+  detalle      String?
   id_usuario   Int?
-
-  usuario Usuario? @relation(fields: [id_usuario], references: [id_usuario], onDelete: SetNull)
+  usuarios     Usuario?  @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("historial_cambios")
+}
+
+model ConfiguracionAlertas {
+  id_config   Int       @id @default(autoincrement())
+  tipo_alerta String    @unique @db.VarChar(100)
+  activa      Boolean?  @default(true)
+  parametros  Json?
+
+  @@map("configuracion_alertas")
 }
 
 model Designacion {
