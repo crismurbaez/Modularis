@@ -50,6 +50,19 @@ let AssignmentsService = class AssignmentsService {
         if (data.fecha_cese)
             data.fecha_cese = new Date(data.fecha_cese);
         const created = await this.prisma.designacion.create({ data });
+        const usuarioAsignado = await this.prisma.usuario.findFirst({
+            where: { id_personal: created.id_personal }
+        });
+        if (usuarioAsignado) {
+            await this.prisma.notificacion.create({
+                data: {
+                    id_usuario: usuarioAsignado.id_usuario,
+                    titulo: 'Nueva Asignación de Materia',
+                    mensaje: `Se le ha asignado una nueva materia. Fecha de posesión: ${created.fecha_posesion?.toLocaleDateString()}`,
+                    tipo: 'INFORMATIVO'
+                }
+            });
+        }
         if (created.cuil_profesor_reemplazado) {
             created.cuil_profesor_reemplazado = this.cryptoService.decrypt(created.cuil_profesor_reemplazado);
         }

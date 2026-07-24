@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CryptoModule } from './crypto/crypto.module';
@@ -10,9 +11,13 @@ import { AcademicsModule } from './academics/academics.module';
 import { AssignmentsModule } from './assignments/assignments.module';
 import { GradesModule } from './grades/grades.module';
 import { UsersModule } from './users/users.module';
+import { InstitutionModule } from './institution/institution.module';
+import { AttendanceModule } from './attendance/attendance.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { AuditModule } from './audit/audit.module';
 
 @Module({
-  imports: [CryptoModule, PrismaModule, AuthModule, UsersModule, StudentsModule, TeachersModule, AcademicsModule, AssignmentsModule, GradesModule],
+  imports: [ScheduleModule.forRoot(), CryptoModule, PrismaModule, AuthModule, UsersModule, StudentsModule, TeachersModule, AcademicsModule, AssignmentsModule, GradesModule, InstitutionModule, AttendanceModule, NotificationsModule, AuditModule],
   controllers: [AppController],
   providers: [AppService],
 })
