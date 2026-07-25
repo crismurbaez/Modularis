@@ -182,9 +182,9 @@ erDiagram
     ROLES ||--o{ ROL_PERMISO : "tiene"
     PERMISOS ||--o{ ROL_PERMISO : "asignado a"
     
-    DESIGNACIONES }o--|| PERSONAL_DOCENTE : "asignada a"
     DESIGNACIONES }o--|| MATERIAS : "sobre"
-    
+    DESIGNACIONES }o--|| PERSONAL_DOCENTE : "asignada a"
+        
     MATERIAS }o--|| ORIENTACIONES : "pertenece"
     
     CURSADAS_NOTAS }o--|| ALUMNOS : "inscripto"
