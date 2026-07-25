@@ -294,7 +294,6 @@ erDiagram
     DESIGNACIONES }o--|| PERSONAL_DOCENTE : "asignada a"
     DESIGNACIONES }o--o| SITUACION_REVISTA_DOCENTES : "tiene"
     DESIGNACIONES }o--o| CURSO_SECCION : "curso"
-    DESIGNACIONES }o--o| LIMITES_CALIFICACION_DOCENTES : "tiene"
         
     MATERIAS }o--o| ORIENTACIONES : "pertenece"
     
