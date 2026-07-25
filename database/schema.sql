@@ -202,7 +202,7 @@ CREATE TABLE designaciones (
     id_personal INTEGER NOT NULL REFERENCES personal_docente(id_personal) ON DELETE CASCADE,
     id_materia INTEGER NOT NULL REFERENCES materias(id_materia) ON DELETE CASCADE,
     cupof VARCHAR(50), 
-    curso_seccion VARCHAR(50), 
+    id_curso_seccion INTEGER REFERENCES curso_seccion(id_curso_seccion), 
     fecha_posesion DATE,
     fecha_cese DATE,
     id_situacion_revista INTEGER REFERENCES situacion_revista_docentes(id_situacion_revista),

@@ -175,7 +175,7 @@ erDiagram
         int id_personal FK
         int id_materia FK
         string cupof
-        string curso_seccion
+        int id_curso_seccion FK
         date fecha_posesion
         date fecha_cese
         int id_situacion_revista FK
@@ -293,6 +293,7 @@ erDiagram
     DESIGNACIONES }o--|| MATERIAS : "sobre"
     DESIGNACIONES }o--|| PERSONAL_DOCENTE : "asignada a"
     DESIGNACIONES }o--o| SITUACION_REVISTA_DOCENTES : "tiene"
+    DESIGNACIONES }o--o| CURSO_SECCION : "curso"
         
     MATERIAS }o--o| ORIENTACIONES : "pertenece"
     

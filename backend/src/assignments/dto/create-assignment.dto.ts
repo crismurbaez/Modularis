@@ -10,9 +10,9 @@ export class CreateAssignmentDto {
   @IsInt()
   id_materia: number;
 
-  @ApiProperty({ example: '1A', description: 'Curso o sección asignada' })
-  @IsString()
-  curso_seccion: string;
+  @ApiProperty({ example: 1, description: 'ID del curso o sección asignada' })
+  @IsInt()
+  id_curso_seccion: number;
 
   @ApiProperty({ example: '2023-03-01', description: 'Fecha de toma de posesión' })
   @IsDateString()

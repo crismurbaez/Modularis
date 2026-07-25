@@ -22,6 +22,7 @@ model CursoSeccion {
   detalle          String? @db.VarChar(200)
 
   estados_asistencia EstadoAsistenciaCurso[]
+  designaciones      Designacion[]
 
   @@map("curso_seccion")
 }
@@ -292,7 +293,7 @@ model Designacion {
   id_personal               Int
   id_materia                Int
   cupof                     String?   @db.VarChar(50)
-  curso_seccion             String?   @db.VarChar(50)
+  id_curso_seccion          Int?
   fecha_posesion            DateTime? @db.Date
   fecha_cese                DateTime? @db.Date
   id_situacion_revista      Int?
@@ -302,6 +303,7 @@ model Designacion {
 
   personal          PersonalDocente          @relation(fields: [id_personal], references: [id_personal], onDelete: Cascade)
   materia           Materia                  @relation(fields: [id_materia], references: [id_materia], onDelete: Cascade)
+  curso             CursoSeccion?            @relation(fields: [id_curso_seccion], references: [id_curso_seccion])
   situacion_revista SituacionRevistaDocente? @relation(fields: [id_situacion_revista], references: [id_situacion_revista])
 
   @@map("designaciones")
