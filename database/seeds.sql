@@ -21,23 +21,6 @@ INSERT INTO rol_permisos (id_rol, id_permiso) VALUES
 (4, 2); -- Profesor -> Modificar Calificaciones
 
 -- ===========================================================================
--- USUARIOS Y PERSONAL INICIAL
--- ===========================================================================
-
--- 1. Superusuario oculto (sin id_personal)
-INSERT INTO usuarios (username, password_hash, id_rol, activo) VALUES
-('superadmin', '$2b$10$EpN10t5T0hOQ/e.k.hO3.u6zX2L4e.rC.q6i/Xw4qP4Mv0Q.O/R6m', 1, TRUE);
-
--- 2. Director inicial (Yanina)
--- Primero creamos el registro en personal_docente
-INSERT INTO personal_docente (dni, cuil, nombre, apellido) VALUES
-('00000000', '27000000000', 'Yanina', 'Poncela');
-
--- Luego vinculamos el usuario
-INSERT INTO usuarios (username, password_hash, id_rol, id_personal, activo) VALUES
-('00000000', '$2b$10$EpN10t5T0hOQ/e.k.hO3.u6zX2L4e.rC.q6i/Xw4qP4Mv0Q.O/R6m', 2, 1, TRUE);
-
--- ===========================================================================
 -- SEEDS PARA MODULARIS (Catálogos Oficiales de PBA)
 -- ===========================================================================
 
