@@ -183,7 +183,7 @@ erDiagram
     PERMISOS ||--o{ ROL_PERMISO : "asignado a"
     
     DESIGNACIONES }o--|| PERSONAL_DOCENTE : "asignada a"
-    DESIGNACIONES }o--|| MATERIA : "sobre"
+    DESIGNACIONES }o--|| MATERIAS : "sobre"
     
     MATERIAS }o--|| ORIENTACIONES : "pertenece"
     
