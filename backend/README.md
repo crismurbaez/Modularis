@@ -17,34 +17,56 @@ Este repositorio contiene la **API RESTful (Backend)** construida con tecnologí
 ### 🌟 Características Principales
 
 - **Gestión Académica Integral:** Control de currículos, orientaciones, cursos, materias y correlatividades.
-- **Seguridad y Criptografía:** Encriptación bidireccional AES-256 para datos sensibles del personal y alumnos (DNI, CUIL, correos, domicilios).
-- **Control de Asistencia Avanzado:** Registro de ausentismos, inasistencias docentes (con motivos predefinidos) y estado de los cursos.
+- **Seguridad y Criptografía:** Encriptación bidireccional AES-256 para datos sensibles del personal y alumnos (DNI, CUIL, correos, domicilios, etc.).
+- **Control de Asistencia Avanzado:** Registro de ausentismos, inasistencias docentes (con motivos predefinidos) y de alumnos (justificadas, injustificadas, etc).
 - **Módulo de Notificaciones y Alertas:** Sistema de avisos automatizados (CronJobs) y alertas configurables por email y panel web (ej. recordatorio de carga de notas o inasistencias).
-- **Trazabilidad y Auditoría:** Registro detallado en el `historial_cambios` de cada acción realizada en la plataforma, permitiendo rastrear quién hizo qué y cuándo.
-- **Gestión Documental Estratégica:** Carga y manejo seguro de firmas digitales e imágenes institucionales.
+- **Trazabilidad y Auditoría:** Interceptores automáticos registran en el `historial_cambios` cada acción de escritura realizada en la plataforma, rastreando quién hizo qué y cuándo.
+- **Gestión Documental Estratégica:** Subida segura de imágenes institucionales y de firmas digitales (usando `Multer`).
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
-- **Framework:** [NestJS](https://nestjs.com/) (Node.js con TypeScript)
-- **Base de Datos:** PostgreSQL
+- **Framework:** [NestJS](https://nestjs.com/) (Node.js v18+ con TypeScript)
+- **Base de Datos:** PostgreSQL v14+
 - **ORM:** [Prisma ORM](https://www.prisma.io/)
-- **Autenticación:** JWT (JSON Web Tokens)
-- **Encriptación:** Bcrypt (contraseñas) y AES-256-CBC (datos personales)
-- **Correos:** Nodemailer
-- **Gestor de Tareas/Cron:** NestJS Schedule
+- **Autenticación y Autorización:** JWT, RBAC (Role-Based Access Control) y ABAC adaptado a Permisos.
+- **Seguridad de Datos:** `bcrypt` para contraseñas, Módulo Crypto custom con `AES-256-CBC` para PII (Personal Identifiable Information).
+- **Notificaciones por Email:** `@nestjs-modules/mailer` con `Nodemailer`
+- **Gestor de Tareas:** `@nestjs/schedule` (CronJobs)
 
 ---
 
-## 🗄️ Arquitectura de la Base de Datos
+## 📂 Arquitectura de Módulos (NestJS)
 
-La base de datos relacional está optimizada para la integridad académica y la seguridad del usuario. A continuación, se presenta un diagrama Entidad-Relación simplificado de los módulos principales:
+El backend está construido bajo una arquitectura altamente modular.
+
+| Módulo | Descripción |
+|---|---|
+| **`Academics`** | Gestiona Orientaciones, Cursos, Secciones y Materias. |
+| **`Assignments`** | Administra las Designaciones docentes (qué profesor dicta qué materia y cuándo). |
+| **`Attendance`** | Control masivo e individual de asistencia para Alumnos y Personal Docente. |
+| **`Audit`** | Provee interceptores (`AuditInterceptor`) que registran automáticamente cambios (POST/PATCH/DELETE) en la base de datos. |
+| **`Auth`** | Maneja login, emisión de JWT y contiene las guardas (`AuthGuard`, `PermissionsGuard`). |
+| **`ConfigAlertas`** | Permite a directivos activar/desactivar cronjobs de notificaciones y cambiar anticipación de avisos. |
+| **`Crypto`** | Servicio core que provee encriptación y desencriptación transparente para PII. |
+| **`Grades`** | Manejo de Cursadas, notas cuatrimestrales, cierres de actas y condición de la materia. |
+| **`Institution`** | Gestión de datos del colegio (CUE, nombre) y subida de Logos y Firmas Directorales. |
+| **`Notifications`** | Tareas automatizadas (Cron) y gestión de notificaciones web y correos. |
+| **`Students`** | CRUD y gestión académica-administrativa del alumnado. |
+| **`Teachers`** | CRUD del Personal Docente (títulos, licencias, situaciones de revista). |
+| **`Users`** | Gestión de cuentas de acceso, roles, y permisos de sistema. |
+
+---
+
+## 🗄️ Esquema de Base de Datos (ERD)
+
+La base de datos relacional está optimizada para la integridad académica y la seguridad del usuario. 
 
 ```mermaid
 erDiagram
-    %% Gestión de Usuarios y Personal
-    USUARIO {
+    %% Gestión de Seguridad y Usuarios
+    USUARIOS {
         int id_usuario PK
         string username
         string password_hash
@@ -52,27 +74,45 @@ erDiagram
         int id_personal FK
         boolean activo
     }
-    PERSONAL_DOCENTE {
-        int id_personal PK
-        string dni "ENCRIPTADO"
-        string cuil "ENCRIPTADO"
-        string nombre
-        string apellido
-        string mail_abc "ENCRIPTADO"
-    }
-    ROL {
+    ROLES {
         int id_rol PK
         string nombre
     }
+    PERMISOS {
+        int id_permiso PK
+        string nombre
+    }
+    ROL_PERMISO {
+        int id_rol FK
+        int id_permiso FK
+    }
     
-    %% Gestión Académica
-    ALUMNO {
-        int id_alumno PK
-        string dni "ENCRIPTADO"
+    %% Gestión de Personal e Institución
+    PERSONAL_DOCENTE {
+        int id_personal PK
+        string dni "AES-256"
+        string cuil "AES-256"
         string nombre
         string apellido
+        string mail_abc "AES-256"
     }
-    MATERIA {
+    INSTITUCION {
+        int id_institucion PK
+        string cue
+        string nombre
+        string logo_path
+    }
+    
+    %% Gestión Académica Central
+    ALUMNOS {
+        int id_alumno PK
+        string dni "AES-256"
+        string cuil "AES-256"
+        string nombre
+        string apellido
+        int id_motivo_baja FK
+    }
+    MATERIAS {
         int id_materia PK
         string materia_nombre
         string area
@@ -85,18 +125,42 @@ erDiagram
         string seccion
         string turno
     }
+    ORIENTACIONES {
+        int id_orientacion PK
+        string nombre
+        string resolucion
+    }
     
-    %% Operaciones Diarias
-    DESIGNACION {
+    %% Operativa: Designaciones, Cursadas y Asistencias
+    DESIGNACIONES {
         int id_designacion PK
         int id_personal FK
         int id_materia FK
         date fecha_posesion
     }
-    CURSADA {
+    CURSADAS_NOTAS {
         int id_cursada PK
         int id_alumno FK
-        int id_curso_seccion FK
+        int id_materia FK
+        string nota_cuat1
+        int faltas_cuat1
+        string nota_cuat2
+        string nota_final
+    }
+    INASISTENCIA_ALUMNOS {
+        int id_inasistencia PK
+        int id_alumno FK
+        date fecha
+        int id_causa FK
+    }
+    
+    %% Trazabilidad
+    HISTORIAL_CAMBIOS {
+        int id_historial PK
+        timestamp fecha
+        string modulo
+        string detalle
+        int id_usuario FK
     }
     NOTIFICACION {
         int id_notificacion PK
@@ -105,82 +169,86 @@ erDiagram
         int id_usuario FK
         boolean leida
     }
+    CONFIGURACION_ALERTAS {
+        int id_config PK
+        string tipo_alerta
+        boolean activa
+        jsonb parametros
+    }
 
-    %% Relaciones
-    USUARIO ||--o| PERSONAL_DOCENTE : "tiene"
-    USUARIO }o--|| ROL : "posee"
-    DESIGNACION }o--|| PERSONAL_DOCENTE : "asignada a"
-    DESIGNACION }o--|| MATERIA : "imparte"
-    CURSADA }o--|| ALUMNO : "inscripto"
-    CURSADA }o--|| CURSO_SECCION : "pertenece"
-    NOTIFICACION }o--o| USUARIO : "recibe"
+    %% Relaciones Principales
+    USUARIOS ||--o| PERSONAL_DOCENTE : "pertenece a"
+    USUARIOS }o--|| ROLES : "posee"
+    ROLES ||--o{ ROL_PERMISO : "tiene"
+    PERMISOS ||--o{ ROL_PERMISO : "asignado a"
+    
+    DESIGNACIONES }o--|| PERSONAL_DOCENTE : "asignada a"
+    DESIGNACIONES }o--|| MATERIA : "sobre"
+    
+    MATERIAS }o--|| ORIENTACIONES : "pertenece"
+    
+    CURSADAS_NOTAS }o--|| ALUMNOS : "inscripto"
+    CURSADAS_NOTAS }o--|| MATERIAS : "cursa"
+    INASISTENCIA_ALUMNOS }o--|| ALUMNOS : "registra"
+    
+    HISTORIAL_CAMBIOS }o--o| USUARIOS : "realizado por"
+    NOTIFICACION }o--o| USUARIOS : "recibe"
 ```
 
 ---
 
 ## 🚀 Instalación y Despliegue
 
-### Requisitos Previos
-- [Node.js](https://nodejs.org/en/) (v18 o superior)
-- [PostgreSQL](https://www.postgresql.org/) (v14 o superior)
+### 1. Clonar el Repositorio
+```bash
+git clone <URL_DEL_REPOSITORIO>
+cd Modularis/backend
+```
 
-### Pasos de Instalación
+### 2. Instalar Dependencias
+```bash
+npm install
+```
 
-1. **Clonar el Repositorio**
-   ```bash
-   git clone <URL_DEL_REPOSITORIO>
-   cd Modularis/backend
-   ```
+### 3. Configurar Variables de Entorno
+Copia el archivo `.env.example` a `.env` y configura tus accesos. 
 
-2. **Instalar Dependencias**
-   ```bash
-   npm install
-   ```
+> [!WARNING]
+> Las variables `ENCRYPTION_KEY` e `ENCRYPTION_IV` son críticas. Si las pierdes, la base de datos se volverá ilegible. `KEY` requiere exactamente 32 bytes y `IV` exactamente 16 bytes.
 
-3. **Configurar las Variables de Entorno**
-   Renombra el archivo `.env.example` a `.env` y configura los accesos a tu base de datos y credenciales criptográficas:
-   ```env
-   # Base de Datos
-   DATABASE_URL="postgresql://usuario:contraseña@localhost:5432/modularis_db?schema=public"
-   
-   # JWT & Encriptación
-   JWT_SECRET="super_secret_jwt"
-   ENCRYPTION_KEY="llave_de_32_caracteres_exactos_!"
-   ENCRYPTION_IV="vector_de_16_caracteres_!"
-   
-   # SMTP Correo
-   SMTP_HOST="smtp.gmail.com"
-   SMTP_PORT=587
-   SMTP_USER="tucorreo@gmail.com"
-   SMTP_PASS="tu_contraseña_de_aplicacion"
-   ```
+```env
+# Base de Datos
+DATABASE_URL="postgresql://usuario:contraseña@localhost:5432/modularis_db?schema=public"
 
-4. **Preparar la Base de Datos**
-   Ejecuta las migraciones/esquema y la semilla inicial (cargará orientaciones, roles, materias y permisos básicos):
-   ```bash
-   npx prisma generate
-   npm run prisma:seed
-   ```
-   *(Nota: Asegúrate de crear a los administradores manualmente siguiendo la guía interna de seguridad).*
+# JWT & Encriptación
+JWT_SECRET="super_secret_jwt"
+ENCRYPTION_KEY="llave_de_32_caracteres_exactos_!"
+ENCRYPTION_IV="vector_de_16_caracteres_!"
 
-5. **Iniciar el Servidor**
-   ```bash
-   # Desarrollo
-   npm run start:dev
+# SMTP Correo (Ej: App Passwords de Gmail)
+SMTP_HOST="smtp.gmail.com"
+SMTP_PORT=587
+SMTP_USER="tucorreo@gmail.com"
+SMTP_PASS="tu_contraseña_de_aplicacion"
+```
 
-   # Producción
-   npm run build
-   npm run start:prod
-   ```
+### 4. Preparar la Base de Datos
+Carga la estructura en PostgreSQL, sincroniza Prisma y siembra los datos iniciales obligatorios.
+```bash
+npx prisma generate
+npm run prisma:seed
+```
+*(Para más detalles sobre la creación del Superusuario, refiérase al archivo interno `database/crear_usuarios_maestros.sql` que se mantiene ignorado en Git).*
 
----
+### 5. Iniciar el Servidor
+```bash
+# Desarrollo con Auto-Reload
+npm run start:dev
 
-## 🛡️ Seguridad y Buenas Prácticas
+# Producción
+npm run build
+npm run start:prod
+```
 
-- **Cifrado en Reposo:** Las consultas de inserción y recuperación pasan por un `CryptoInterceptor` a nivel global. Un atacante con acceso al volcado SQL no podrá leer la información privada de los docentes o alumnos.
-- **Control de Acceso basado en Roles (RBAC):** Múltiples Guardias (`AuthGuard`, `PermissionsGuard`) evalúan dinámicamente si el token posee el rol y permisos requeridos para la ruta específica.
-- **Filtros de Subida Seguros:** Se utiliza `Multer` para restringir el tamaño y el formato (solo imágenes) al gestionar logos e identidades visuales institucionales.
-
----
-
-> Creado con ❤️ para potenciar la educación de jóvenes y adultos en entornos CENS.
+## 📜 Licencia
+Este proyecto es de uso exclusivo y cerrado para la institución educativa asignada. Todos los derechos reservados.
