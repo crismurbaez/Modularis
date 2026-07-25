@@ -95,15 +95,33 @@ erDiagram
         int id_personal PK
         string dni "AES-256"
         string cuil "AES-256"
-        string nombre
-        string apellido
+        string nombre "AES-256"
+        string apellido "AES-256"
+        string fecha_nacimiento "AES-256"
+        string direccion "AES-256"
+        string localidad "AES-256"
+        string distrito "AES-256"
         string mail_abc "AES-256"
+        string mail_personal "AES-256"
+        string telefono "AES-256"
+        string titulo_habilitante
+        boolean titulo_docente
+        boolean activo
     }
     DATOS_INSTITUCION {
         int id_datos PK
-        string cue
         string nombre_completo
+        string nombre_siglas
+        string numero
+        string descripcion
+        string direccion
+        string localidad
+        string distrito
+        string mail
+        string icono
         string imagen_sello
+        string telefono
+        string cue
     }
     
     %% Gestión Académica Central
@@ -111,8 +129,15 @@ erDiagram
         int id_alumno PK
         string dni "AES-256"
         string cuil "AES-256"
-        string nombre
-        string apellido
+        string nombre "AES-256"
+        string apellido "AES-256"
+        string fecha_nacimiento 
+        int edad 
+        string lugar_nacimiento 
+        string nacionalidad 
+        string primaria_origen 
+        string secundario_incompleto 
+        boolean analitico_parcial 
         int id_estado FK
         int id_motivo_baja FK
     }
@@ -122,7 +147,9 @@ erDiagram
         string area
         string modulo
         int anio
+        int horas_catedra
         int id_orientacion FK
+        string codigo_pid
         boolean activo
     }
     CURSO_SECCION {
@@ -147,16 +174,29 @@ erDiagram
         int id_designacion PK
         int id_personal FK
         int id_materia FK
-        int id_situacion_revista FK
+        string cupof
+        string curso_seccion
         date fecha_posesion
+        date fecha_cese
+        int id_situacion_revista FK
+        string cuil_profesor_reemplazado
+        decimal nota_desempeno
+        text fundamentacion_baja_nota
     }
     CURSADAS_NOTAS {
         int id_cursada PK
         int id_alumno FK
         int id_materia FK
         int ciclo_lectivo
-        int id_condicion_materia FK
+        string nota_cuat1
+        int faltas_cuat1
+        string nota_cuat2
+        int faltas_cuat2
+        id_condicion_materia INTEGER REFERENCES condicion_materia(id_condicion),
         string nota_final
+        string mes_acreditacion
+        int anio_acreditacion
+        text observaciones
     }
     INASISTENCIA_ALUMNOS {
         int id_inasistencia PK
@@ -169,6 +209,7 @@ erDiagram
         int id_personal FK
         date fecha
         int id_motivo FK
+        text observaciones
     }
     ESTADO_ASISTENCIA_CURSO {
         int id_estado PK
@@ -181,26 +222,41 @@ erDiagram
     ESTADO_ALUMNOS {
         int id_estado PK
         string nombre
+        string detalle
     }
     MOTIVO_BAJA_ALUMNOS {
         int id_motivo_baja PK
         string nombre
+        string detalle
     }
     SITUACION_REVISTA_DOCENTES {
         int id_situacion_revista PK
         string nombre
+        string detalle
     }
     CONDICION_MATERIA {
         int id_condicion PK
         string nombre
+        string detalle
     }
     CAUSA_INASISTENCIA_ALUMNOS {
         int id_causa PK
         string nombre
+        string detalle
     }
     MOTIVO_INASISTENCIAS_DOCENTES {
         int id_motivo PK
         string nombre
+        string detalle
+    }
+
+    LIMITES_CALIFICACION_DOCENTES {
+        int limite_superior
+        int limite_inferior
+    }
+    LIMITES_CALIFICACION_ALUMNOS {
+        int limite_superior
+        int limite_inferior
     }
     
     %% Trazabilidad
@@ -217,6 +273,8 @@ erDiagram
         string mensaje
         int id_usuario FK
         int id_rol FK
+        tipo string
+        fecha_creacion timestamp
         boolean leida
     }
     CONFIGURACION_ALERTAS {
