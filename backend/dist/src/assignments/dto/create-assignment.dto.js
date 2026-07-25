@@ -26,10 +26,10 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateAssignmentDto.prototype, "id_materia", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: '1A', description: 'Curso o sección asignada' }),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateAssignmentDto.prototype, "curso_seccion", void 0);
+    (0, swagger_1.ApiProperty)({ example: 1, description: 'ID del curso o sección asignada' }),
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], CreateAssignmentDto.prototype, "id_curso_seccion", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: '2023-03-01', description: 'Fecha de toma de posesión' }),
     (0, class_validator_1.IsDateString)(),

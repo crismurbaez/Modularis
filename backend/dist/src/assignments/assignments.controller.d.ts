@@ -7,7 +7,7 @@ export declare class AssignmentsController {
     create(createAssignmentDto: CreateAssignmentDto): Promise<{
         id_personal: number;
         id_materia: number;
-        curso_seccion: string | null;
+        id_curso_seccion: number | null;
         fecha_posesion: Date | null;
         fecha_cese: Date | null;
         id_situacion_revista: number | null;
@@ -20,7 +20,7 @@ export declare class AssignmentsController {
     findAll(): Promise<{
         id_personal: number;
         id_materia: number;
-        curso_seccion: string | null;
+        id_curso_seccion: number | null;
         fecha_posesion: Date | null;
         fecha_cese: Date | null;
         id_situacion_revista: number | null;
@@ -33,7 +33,7 @@ export declare class AssignmentsController {
     findOne(id: string): Promise<{
         id_personal: number;
         id_materia: number;
-        curso_seccion: string | null;
+        id_curso_seccion: number | null;
         fecha_posesion: Date | null;
         fecha_cese: Date | null;
         id_situacion_revista: number | null;
@@ -46,7 +46,7 @@ export declare class AssignmentsController {
     update(id: string, updateAssignmentDto: UpdateAssignmentDto): Promise<{
         id_personal: number;
         id_materia: number;
-        curso_seccion: string | null;
+        id_curso_seccion: number | null;
         fecha_posesion: Date | null;
         fecha_cese: Date | null;
         id_situacion_revista: number | null;
