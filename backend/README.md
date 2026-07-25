@@ -77,14 +77,17 @@ erDiagram
     ROLES {
         int id_rol PK
         string nombre
+        string descripcion
     }
     PERMISOS {
         int id_permiso PK
-        string nombre
+        string codigo
+        string modulo
+        string descripcion
     }
-    ROL_PERMISO {
-        int id_rol FK
-        int id_permiso FK
+    ROL_PERMISOS {
+        int id_rol PK,FK
+        int id_permiso PK,FK
     }
     
     %% Gestión de Personal e Institución
@@ -96,11 +99,11 @@ erDiagram
         string apellido
         string mail_abc "AES-256"
     }
-    INSTITUCION {
-        int id_institucion PK
+    DATOS_INSTITUCION {
+        int id_datos PK
         string cue
-        string nombre
-        string logo_path
+        string nombre_completo
+        string imagen_sello
     }
     
     %% Gestión Académica Central
@@ -110,25 +113,33 @@ erDiagram
         string cuil "AES-256"
         string nombre
         string apellido
+        int id_estado FK
         int id_motivo_baja FK
     }
     MATERIAS {
         int id_materia PK
         string materia_nombre
         string area
+        string modulo
         int anio
         int id_orientacion FK
+        boolean activo
     }
     CURSO_SECCION {
         int id_curso_seccion PK
-        string curso
-        string seccion
-        string turno
+        string nombre
+        string detalle
     }
     ORIENTACIONES {
         int id_orientacion PK
         string nombre
-        string resolucion
+        string detalle
+    }
+    CALENDARIO_ACADEMICO {
+        int id_calendario PK
+        string evento
+        date fecha_inicio
+        date fecha_fin
     }
     
     %% Operativa: Designaciones, Cursadas y Asistencias
@@ -136,15 +147,15 @@ erDiagram
         int id_designacion PK
         int id_personal FK
         int id_materia FK
+        int id_situacion_revista FK
         date fecha_posesion
     }
     CURSADAS_NOTAS {
         int id_cursada PK
         int id_alumno FK
         int id_materia FK
-        string nota_cuat1
-        int faltas_cuat1
-        string nota_cuat2
+        int ciclo_lectivo
+        int id_condicion_materia FK
         string nota_final
     }
     INASISTENCIA_ALUMNOS {
@@ -152,6 +163,44 @@ erDiagram
         int id_alumno FK
         date fecha
         int id_causa FK
+    }
+    INASISTENCIAS_DIARIAS_DOCENTES {
+        int id_inasistencia PK
+        int id_personal FK
+        date fecha
+        int id_motivo FK
+    }
+    ESTADO_ASISTENCIA_CURSO {
+        int id_estado PK
+        int id_curso_seccion FK
+        date fecha
+        int id_usuario FK
+    }
+    
+    %% Catálogos
+    ESTADO_ALUMNOS {
+        int id_estado PK
+        string nombre
+    }
+    MOTIVO_BAJA_ALUMNOS {
+        int id_motivo_baja PK
+        string nombre
+    }
+    SITUACION_REVISTA_DOCENTES {
+        int id_situacion_revista PK
+        string nombre
+    }
+    CONDICION_MATERIA {
+        int id_condicion PK
+        string nombre
+    }
+    CAUSA_INASISTENCIA_ALUMNOS {
+        int id_causa PK
+        string nombre
+    }
+    MOTIVO_INASISTENCIAS_DOCENTES {
+        int id_motivo PK
+        string nombre
     }
     
     %% Trazabilidad
@@ -162,11 +211,12 @@ erDiagram
         string detalle
         int id_usuario FK
     }
-    NOTIFICACION {
+    NOTIFICACIONES {
         int id_notificacion PK
         string titulo
         string mensaje
         int id_usuario FK
+        int id_rol FK
         boolean leida
     }
     CONFIGURACION_ALERTAS {
@@ -179,20 +229,34 @@ erDiagram
     %% Relaciones Principales
     USUARIOS ||--o| PERSONAL_DOCENTE : "pertenece a"
     USUARIOS }o--|| ROLES : "posee"
-    ROLES ||--o{ ROL_PERMISO : "tiene"
-    PERMISOS ||--o{ ROL_PERMISO : "asignado a"
+    ROLES ||--o{ ROL_PERMISOS : "tiene"
+    PERMISOS ||--o{ ROL_PERMISOS : "asignado a"
     
     DESIGNACIONES }o--|| MATERIAS : "sobre"
     DESIGNACIONES }o--|| PERSONAL_DOCENTE : "asignada a"
+    DESIGNACIONES }o--o| SITUACION_REVISTA_DOCENTES : "tiene"
         
-    MATERIAS }o--|| ORIENTACIONES : "pertenece"
+    MATERIAS }o--o| ORIENTACIONES : "pertenece"
     
     CURSADAS_NOTAS }o--|| ALUMNOS : "inscripto"
     CURSADAS_NOTAS }o--|| MATERIAS : "cursa"
+    CURSADAS_NOTAS }o--o| CONDICION_MATERIA : "condicion"
+    
+    ALUMNOS }o--o| ESTADO_ALUMNOS : "estado"
+    ALUMNOS }o--o| MOTIVO_BAJA_ALUMNOS : "motivo_baja"
+    
     INASISTENCIA_ALUMNOS }o--|| ALUMNOS : "registra"
+    INASISTENCIA_ALUMNOS }o--|| CAUSA_INASISTENCIA_ALUMNOS : "causa"
+    
+    INASISTENCIAS_DIARIAS_DOCENTES }o--|| PERSONAL_DOCENTE : "registra"
+    INASISTENCIAS_DIARIAS_DOCENTES }o--o| MOTIVO_INASISTENCIAS_DOCENTES : "motivo"
+    
+    ESTADO_ASISTENCIA_CURSO }o--|| CURSO_SECCION : "sobre"
+    ESTADO_ASISTENCIA_CURSO }o--|| USUARIOS : "registrado por"
     
     HISTORIAL_CAMBIOS }o--o| USUARIOS : "realizado por"
-    NOTIFICACION }o--o| USUARIOS : "recibe"
+    NOTIFICACIONES }o--o| USUARIOS : "recibe"
+    NOTIFICACIONES }o--o| ROLES : "dirigido a"
 ```
 
 ---
