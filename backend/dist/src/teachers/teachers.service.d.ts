@@ -15,9 +15,9 @@ export declare class TeachersService {
     findOne(id: number): Promise<any>;
     update(id: number, updateTeacherDto: UpdateTeacherDto): Promise<any>;
     addAbsence(id: number, createAbsenceDto: CreateAbsenceDto): Promise<{
+        fecha: Date;
         id_personal: number;
         id_inasistencia: number;
-        fecha: Date;
         id_motivo: number | null;
         observaciones: string | null;
     }>;

@@ -10,9 +10,9 @@ export declare class TeachersController {
     findOne(id: string): Promise<any>;
     update(id: string, updateTeacherDto: UpdateTeacherDto): Promise<any>;
     addAbsence(id: string, createAbsenceDto: CreateAbsenceDto): Promise<{
+        fecha: Date;
         id_personal: number;
         id_inasistencia: number;
-        fecha: Date;
         id_motivo: number | null;
         observaciones: string | null;
     }>;

@@ -1,0 +1,1 @@
+const { Pool } = require('pg'); const pool = new Pool({ connectionString: 'postgresql://postgres:postgres@localhost:5432/modularis?schema=public' }); pool.query('SELECT * FROM permisos WHERE id_permiso = 1').then(res => console.log('Permiso:', res.rows[0])).catch(console.error).finally(() => pool.end());

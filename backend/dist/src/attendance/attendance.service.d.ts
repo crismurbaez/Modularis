@@ -5,10 +5,10 @@ export declare class AttendanceService {
     registerBulk(bulkData: any): Promise<{
         success: boolean;
         estado: {
-            id_usuario: number;
-            id_estado: number;
             fecha: Date;
+            id_estado: number;
             id_curso_seccion: number;
+            id_usuario: number;
         };
     }>;
     getCalendar(month: string, year: string): Promise<{
