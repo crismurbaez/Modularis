@@ -143,17 +143,17 @@ model RolPermiso {
 
 model PersonalDocente {
   id_personal        Int      @id @default(autoincrement())
-  dni                String   @unique @db.VarChar(255)
-  nombre             String   @db.VarChar(150)
-  apellido           String   @db.VarChar(150)
-  cuil               String   @unique @db.VarChar(255)
-  fecha_nacimiento   String?  @db.VarChar(255) // Changed to String for encryption
-  direccion          String?  @db.VarChar(255)
-  localidad          String?  @db.VarChar(255)
-  distrito           String?  @db.VarChar(100)
-  mail_abc           String?  @db.VarChar(255)
-  mail_personal      String?  @db.VarChar(255)
-  telefono           String?  @db.VarChar(255)
+  dni                String   @db.Text
+  nombre             String   @db.Text
+  apellido           String   @db.Text
+  cuil               String   @db.Text
+  fecha_nacimiento   String?  @db.Text
+  direccion          String?  @db.Text
+  localidad          String?  @db.Text
+  distrito           String?  @db.Text
+  mail_abc           String?  @db.Text
+  mail_personal      String?  @db.Text
+  telefono           String?  @db.Text
   titulo_habilitante String?  @db.VarChar(150)
   titulo_docente     Boolean? @default(false)
   activo             Boolean  @default(true)
@@ -184,11 +184,11 @@ model Usuario {
 
 model Alumno {
   id_alumno             Int      @id @default(autoincrement())
-  dni                   String   @unique @db.VarChar(255)
-  cuil                  String   @unique @db.VarChar(255)
-  nombre                String   @db.VarChar(150)
-  apellido              String   @db.VarChar(150)
-  fecha_nacimiento      String?  @db.VarChar(255) // Changed to string for encryption consistency
+  dni                   String   @db.Text
+  cuil                  String   @db.Text
+  nombre                String   @db.Text
+  apellido              String   @db.Text
+  fecha_nacimiento      String?  @db.VarChar(255)
   edad                  Int?
   lugar_nacimiento      String?  @db.VarChar(120)
   nacionalidad          String?  @db.VarChar(80)
@@ -206,6 +206,7 @@ model Alumno {
 
   @@map("alumnos")
 }
+
 
 model Materia {
   id_materia     Int           @id @default(autoincrement())
@@ -291,7 +292,7 @@ model ConfiguracionAlertas {
 model Designacion {
   id_designacion            Int       @id @default(autoincrement())
   id_personal               Int
-  id_materia                Int
+  id_materia                Int?
   cupof                     String?   @db.VarChar(50)
   id_curso_seccion          Int?
   fecha_posesion            DateTime? @db.Date
@@ -302,7 +303,7 @@ model Designacion {
   fundamentacion_baja_nota  String?   @db.Text
 
   personal          PersonalDocente          @relation(fields: [id_personal], references: [id_personal], onDelete: Cascade)
-  materia           Materia                  @relation(fields: [id_materia], references: [id_materia], onDelete: Cascade)
+  materia           Materia?                 @relation(fields: [id_materia], references: [id_materia], onDelete: Cascade)
   curso             CursoSeccion?            @relation(fields: [id_curso_seccion], references: [id_curso_seccion])
   situacion_revista SituacionRevistaDocente? @relation(fields: [id_situacion_revista], references: [id_situacion_revista])
 

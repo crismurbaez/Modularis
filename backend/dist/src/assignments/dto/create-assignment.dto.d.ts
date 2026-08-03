@@ -1,7 +1,8 @@
 export declare class CreateAssignmentDto {
     id_personal: number;
-    id_materia: number;
-    id_curso_seccion: number;
+    cupof: string;
+    id_materia?: number;
+    id_curso_seccion?: number;
     fecha_posesion: string;
     fecha_cese?: string;
     id_situacion_revista: number;

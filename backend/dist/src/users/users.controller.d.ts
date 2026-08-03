@@ -9,54 +9,54 @@ export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
     findAll(): Promise<{
+        rol: {
+            id_rol: number;
+            nombre: string;
+            descripcion: string | null;
+        };
         id_usuario: number;
         username: string;
         activo: boolean;
-        rol: {
-            descripcion: string | null;
-            id_rol: number;
-            nombre: string;
-        };
         personal: {
-            direccion: string | null;
-            localidad: string | null;
-            distrito: string | null;
-            telefono: string | null;
             id_personal: number;
             activo: boolean;
             nombre: string;
             dni: string;
-            apellido: string;
             cuil: string;
+            apellido: string;
             fecha_nacimiento: string | null;
+            direccion: string | null;
+            localidad: string | null;
+            distrito: string | null;
             mail_abc: string | null;
             mail_personal: string | null;
+            telefono: string | null;
             titulo_habilitante: string | null;
             titulo_docente: boolean | null;
         } | null;
     }[]>;
     create(createUserDto: CreateUserDto): Promise<{
-        id_usuario: number;
-        username: string;
         rol: {
-            descripcion: string | null;
             id_rol: number;
             nombre: string;
+            descripcion: string | null;
         };
+        id_usuario: number;
+        username: string;
         personal: {
-            direccion: string | null;
-            localidad: string | null;
-            distrito: string | null;
-            telefono: string | null;
             id_personal: number;
             activo: boolean;
             nombre: string;
             dni: string;
-            apellido: string;
             cuil: string;
+            apellido: string;
             fecha_nacimiento: string | null;
+            direccion: string | null;
+            localidad: string | null;
+            distrito: string | null;
             mail_abc: string | null;
             mail_personal: string | null;
+            telefono: string | null;
             titulo_habilitante: string | null;
             titulo_docente: boolean | null;
         } | null;
@@ -66,11 +66,11 @@ export declare class UsersController {
         activo: boolean;
     }>;
     updateRole(id: number, id_rol: number): Promise<{
-        id_usuario: number;
         rol: {
-            descripcion: string | null;
             id_rol: number;
             nombre: string;
+            descripcion: string | null;
         };
+        id_usuario: number;
     }>;
 }

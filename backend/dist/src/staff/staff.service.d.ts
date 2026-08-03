@@ -1,0 +1,93 @@
+import { CreateStaffDto } from './dto/create-staff.dto';
+import { UpdateStaffDto } from './dto/update-staff.dto';
+import { CreateAbsenceDto } from './dto/create-absence.dto';
+import { PrismaService } from '../prisma/prisma.service';
+export declare class StaffService {
+    private prisma;
+    private cryptoKey;
+    constructor(prisma: PrismaService);
+    checkDuplicates(tx: any, dni: string, cuil: string, idToIgnore?: number): Promise<void>;
+    create(createStaffDto: CreateStaffDto): Promise<{
+        id_personal: number;
+        activo: boolean;
+        nombre: string;
+        dni: string;
+        cuil: string;
+        apellido: string;
+        fecha_nacimiento: string | null;
+        direccion: string | null;
+        localidad: string | null;
+        distrito: string | null;
+        mail_abc: string | null;
+        mail_personal: string | null;
+        telefono: string | null;
+        titulo_habilitante: string | null;
+        titulo_docente: boolean | null;
+    }>;
+    findAll(): Promise<{
+        id_personal: number;
+        activo: boolean;
+        nombre: string;
+        dni: string;
+        cuil: string;
+        apellido: string;
+        fecha_nacimiento: string | null;
+        direccion: string | null;
+        localidad: string | null;
+        distrito: string | null;
+        mail_abc: string | null;
+        mail_personal: string | null;
+        telefono: string | null;
+        titulo_habilitante: string | null;
+        titulo_docente: boolean | null;
+    }[]>;
+    findOne(id: number): Promise<{
+        estadistica_faltas_totales: number;
+        inasistencias: {
+            id_personal: number;
+            id_inasistencia: number;
+            fecha: Date;
+            id_motivo: number | null;
+            observaciones: string | null;
+        }[];
+        id_personal: number;
+        activo: boolean;
+        nombre: string;
+        dni: string;
+        cuil: string;
+        apellido: string;
+        fecha_nacimiento: string | null;
+        direccion: string | null;
+        localidad: string | null;
+        distrito: string | null;
+        mail_abc: string | null;
+        mail_personal: string | null;
+        telefono: string | null;
+        titulo_habilitante: string | null;
+        titulo_docente: boolean | null;
+    }>;
+    update(id: number, updateStaffDto: UpdateStaffDto): Promise<{
+        id_personal: number;
+        activo: boolean;
+        nombre: string;
+        dni: string;
+        cuil: string;
+        apellido: string;
+        fecha_nacimiento: string | null;
+        direccion: string | null;
+        localidad: string | null;
+        distrito: string | null;
+        mail_abc: string | null;
+        mail_personal: string | null;
+        telefono: string | null;
+        titulo_habilitante: string | null;
+        titulo_docente: boolean | null;
+    }>;
+    addAbsence(id: number, createAbsenceDto: CreateAbsenceDto): Promise<{
+        id_personal: number;
+        id_inasistencia: number;
+        fecha: Date;
+        id_motivo: number | null;
+        observaciones: string | null;
+    }>;
+}

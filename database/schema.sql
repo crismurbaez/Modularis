@@ -1,4 +1,10 @@
 -- ===========================================================================
+-- 0. EXTENSIONES
+-- ===========================================================================
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- ===========================================================================
 -- 1. TABLAS MAESTRAS (Catálogos Independientes)
 -- ===========================================================================
 
@@ -87,19 +93,19 @@ CREATE TABLE rol_permisos (
 -- 2. ENTIDADES PRINCIPALES
 -- ===========================================================================
 
-CREATE TABLE personal_docente (
+CREATE TABLE personal_docente_raw (
     id_personal SERIAL PRIMARY KEY,
-    dni VARCHAR(255) NOT NULL UNIQUE,
-    nombre VARCHAR(150) NOT NULL,
-    apellido VARCHAR(150) NOT NULL,
-    cuil VARCHAR(255) NOT NULL UNIQUE,
-    fecha_nacimiento VARCHAR(255),
-    direccion VARCHAR(255),
-    localidad VARCHAR(255),
-    distrito VARCHAR(100),
-    mail_abc VARCHAR(255),
-    mail_personal VARCHAR(255),
-    telefono VARCHAR(255),
+    dni TEXT NOT NULL,
+    nombre TEXT NOT NULL,
+    apellido TEXT NOT NULL,
+    cuil TEXT NOT NULL,
+    fecha_nacimiento TEXT,
+    direccion TEXT,
+    localidad TEXT,
+    distrito TEXT,
+    mail_abc TEXT,
+    mail_personal TEXT,
+    telefono TEXT,
     titulo_habilitante VARCHAR(150),
     titulo_docente BOOLEAN DEFAULT FALSE,
     activo BOOLEAN DEFAULT TRUE
@@ -110,16 +116,16 @@ CREATE TABLE usuarios (
     username VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     id_rol INTEGER NOT NULL REFERENCES roles(id_rol),
-    id_personal INTEGER REFERENCES personal_docente(id_personal) ON DELETE SET NULL,
+    id_personal INTEGER REFERENCES personal_docente_raw(id_personal) ON DELETE SET NULL,
     activo BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE alumnos (
+CREATE TABLE alumnos_raw (
     id_alumno SERIAL PRIMARY KEY,
-    dni VARCHAR(255) NOT NULL UNIQUE,
-    cuil VARCHAR(255) NOT NULL UNIQUE,
-    nombre VARCHAR(150) NOT NULL,
-    apellido VARCHAR(150) NOT NULL,
+    dni TEXT NOT NULL,
+    cuil TEXT NOT NULL,
+    nombre TEXT NOT NULL,
+    apellido TEXT NOT NULL,
     fecha_nacimiento VARCHAR(255),
     edad INTEGER,
     lugar_nacimiento VARCHAR(120),
@@ -199,8 +205,8 @@ CREATE TABLE historial_cambios (
 
 CREATE TABLE designaciones (
     id_designacion SERIAL PRIMARY KEY,
-    id_personal INTEGER NOT NULL REFERENCES personal_docente(id_personal) ON DELETE CASCADE,
-    id_materia INTEGER NOT NULL REFERENCES materias(id_materia) ON DELETE CASCADE,
+    id_personal INTEGER NOT NULL REFERENCES personal_docente_raw(id_personal) ON DELETE CASCADE,
+    id_materia INTEGER REFERENCES materias(id_materia) ON DELETE CASCADE,
     cupof VARCHAR(50), 
     id_curso_seccion INTEGER REFERENCES curso_seccion(id_curso_seccion), 
     fecha_posesion DATE,
@@ -213,7 +219,7 @@ CREATE TABLE designaciones (
 
 CREATE TABLE cursadas_notas (
     id_cursada SERIAL PRIMARY KEY,
-    id_alumno INTEGER NOT NULL REFERENCES alumnos(id_alumno) ON DELETE CASCADE,
+    id_alumno INTEGER NOT NULL REFERENCES alumnos_raw(id_alumno) ON DELETE CASCADE,
     id_materia INTEGER NOT NULL REFERENCES materias(id_materia) ON DELETE CASCADE,
     ciclo_lectivo INTEGER NOT NULL,
     nota_cuat1 VARCHAR(15), 
@@ -228,7 +234,7 @@ CREATE TABLE cursadas_notas (
 
 CREATE TABLE inasistencias_diarias_docentes (
     id_inasistencia SERIAL PRIMARY KEY,
-    id_personal INTEGER NOT NULL REFERENCES personal_docente(id_personal) ON DELETE CASCADE,
+    id_personal INTEGER NOT NULL REFERENCES personal_docente_raw(id_personal) ON DELETE CASCADE,
     fecha DATE NOT NULL,
     id_motivo INTEGER REFERENCES motivo_inasistencias_docentes(id_motivo),
     observaciones TEXT
@@ -236,7 +242,7 @@ CREATE TABLE inasistencias_diarias_docentes (
 
 CREATE TABLE inasistencia_alumnos (
     id_inasistencia SERIAL PRIMARY KEY,
-    id_alumno INTEGER NOT NULL REFERENCES alumnos(id_alumno) ON DELETE CASCADE,
+    id_alumno INTEGER NOT NULL REFERENCES alumnos_raw(id_alumno) ON DELETE CASCADE,
     fecha DATE NOT NULL,
     id_causa INTEGER NOT NULL REFERENCES causa_inasistencia_alumnos(id_causa),
     observaciones TEXT,
@@ -250,3 +256,145 @@ CREATE TABLE estado_asistencia_curso (
     id_usuario INTEGER NOT NULL REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
     UNIQUE(id_curso_seccion, fecha)
 );
+
+-- ===========================================================================
+-- 4. VISTAS DESENCRIPTADAS
+-- ===========================================================================
+
+CREATE VIEW personal_docente AS
+SELECT 
+    id_personal,
+    pgp_sym_decrypt(dni::bytea, current_setting('app.crypto_key', true)) AS dni,
+    pgp_sym_decrypt(nombre::bytea, current_setting('app.crypto_key', true)) AS nombre,
+    pgp_sym_decrypt(apellido::bytea, current_setting('app.crypto_key', true)) AS apellido,
+    pgp_sym_decrypt(cuil::bytea, current_setting('app.crypto_key', true)) AS cuil,
+    pgp_sym_decrypt(fecha_nacimiento::bytea, current_setting('app.crypto_key', true)) AS fecha_nacimiento,
+    pgp_sym_decrypt(direccion::bytea, current_setting('app.crypto_key', true)) AS direccion,
+    pgp_sym_decrypt(localidad::bytea, current_setting('app.crypto_key', true)) AS localidad,
+    pgp_sym_decrypt(distrito::bytea, current_setting('app.crypto_key', true)) AS distrito,
+    pgp_sym_decrypt(mail_abc::bytea, current_setting('app.crypto_key', true)) AS mail_abc,
+    pgp_sym_decrypt(mail_personal::bytea, current_setting('app.crypto_key', true)) AS mail_personal,
+    pgp_sym_decrypt(telefono::bytea, current_setting('app.crypto_key', true)) AS telefono,
+    titulo_habilitante,
+    titulo_docente,
+    activo
+FROM personal_docente_raw;
+
+CREATE VIEW alumnos AS
+SELECT 
+    id_alumno,
+    pgp_sym_decrypt(dni::bytea, current_setting('app.crypto_key', true)) AS dni,
+    pgp_sym_decrypt(cuil::bytea, current_setting('app.crypto_key', true)) AS cuil,
+    pgp_sym_decrypt(nombre::bytea, current_setting('app.crypto_key', true)) AS nombre,
+    pgp_sym_decrypt(apellido::bytea, current_setting('app.crypto_key', true)) AS apellido,
+    fecha_nacimiento,
+    edad,
+    lugar_nacimiento,
+    nacionalidad,
+    primaria_origen,
+    secundario_incompleto,
+    analitico_parcial,
+    id_estado,
+    id_motivo_baja
+FROM alumnos_raw;
+
+-- ===========================================================================
+-- 5. TRIGGERS DE ENCRIPTACION
+-- ===========================================================================
+
+CREATE OR REPLACE FUNCTION trg_personal_docente_upsert()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO personal_docente_raw (
+            dni, nombre, apellido, cuil, fecha_nacimiento, direccion, localidad, distrito, mail_abc, mail_personal, telefono, titulo_habilitante, titulo_docente, activo
+        ) VALUES (
+            pgp_sym_encrypt(NEW.dni, current_setting('app.crypto_key', true)),
+            pgp_sym_encrypt(NEW.nombre, current_setting('app.crypto_key', true)),
+            pgp_sym_encrypt(NEW.apellido, current_setting('app.crypto_key', true)),
+            pgp_sym_encrypt(NEW.cuil, current_setting('app.crypto_key', true)),
+            pgp_sym_encrypt(NEW.fecha_nacimiento, current_setting('app.crypto_key', true)),
+            pgp_sym_encrypt(NEW.direccion, current_setting('app.crypto_key', true)),
+            pgp_sym_encrypt(NEW.localidad, current_setting('app.crypto_key', true)),
+            pgp_sym_encrypt(NEW.distrito, current_setting('app.crypto_key', true)),
+            pgp_sym_encrypt(NEW.mail_abc, current_setting('app.crypto_key', true)),
+            pgp_sym_encrypt(NEW.mail_personal, current_setting('app.crypto_key', true)),
+            pgp_sym_encrypt(NEW.telefono, current_setting('app.crypto_key', true)),
+            NEW.titulo_habilitante,
+            NEW.titulo_docente,
+            NEW.activo
+        ) RETURNING id_personal INTO NEW.id_personal;
+        RETURN NEW;
+    ELSIF TG_OP = 'UPDATE' THEN
+        UPDATE personal_docente_raw SET
+            dni = pgp_sym_encrypt(NEW.dni, current_setting('app.crypto_key', true)),
+            nombre = pgp_sym_encrypt(NEW.nombre, current_setting('app.crypto_key', true)),
+            apellido = pgp_sym_encrypt(NEW.apellido, current_setting('app.crypto_key', true)),
+            cuil = pgp_sym_encrypt(NEW.cuil, current_setting('app.crypto_key', true)),
+            fecha_nacimiento = pgp_sym_encrypt(NEW.fecha_nacimiento, current_setting('app.crypto_key', true)),
+            direccion = pgp_sym_encrypt(NEW.direccion, current_setting('app.crypto_key', true)),
+            localidad = pgp_sym_encrypt(NEW.localidad, current_setting('app.crypto_key', true)),
+            distrito = pgp_sym_encrypt(NEW.distrito, current_setting('app.crypto_key', true)),
+            mail_abc = pgp_sym_encrypt(NEW.mail_abc, current_setting('app.crypto_key', true)),
+            mail_personal = pgp_sym_encrypt(NEW.mail_personal, current_setting('app.crypto_key', true)),
+            telefono = pgp_sym_encrypt(NEW.telefono, current_setting('app.crypto_key', true)),
+            titulo_habilitante = NEW.titulo_habilitante,
+            titulo_docente = NEW.titulo_docente,
+            activo = NEW.activo
+        WHERE id_personal = OLD.id_personal;
+        RETURN NEW;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_personal_docente_upsert_trigger
+INSTEAD OF INSERT OR UPDATE ON personal_docente
+FOR EACH ROW EXECUTE FUNCTION trg_personal_docente_upsert();
+
+
+CREATE OR REPLACE FUNCTION trg_alumnos_upsert()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO alumnos_raw (
+            dni, cuil, nombre, apellido, fecha_nacimiento, edad, lugar_nacimiento, nacionalidad, primaria_origen, secundario_incompleto, analitico_parcial, id_estado, id_motivo_baja
+        ) VALUES (
+            pgp_sym_encrypt(NEW.dni, current_setting('app.crypto_key', true)),
+            pgp_sym_encrypt(NEW.cuil, current_setting('app.crypto_key', true)),
+            pgp_sym_encrypt(NEW.nombre, current_setting('app.crypto_key', true)),
+            pgp_sym_encrypt(NEW.apellido, current_setting('app.crypto_key', true)),
+            NEW.fecha_nacimiento,
+            NEW.edad,
+            NEW.lugar_nacimiento,
+            NEW.nacionalidad,
+            NEW.primaria_origen,
+            NEW.secundario_incompleto,
+            NEW.analitico_parcial,
+            NEW.id_estado,
+            NEW.id_motivo_baja
+        ) RETURNING id_alumno INTO NEW.id_alumno;
+        RETURN NEW;
+    ELSIF TG_OP = 'UPDATE' THEN
+        UPDATE alumnos_raw SET
+            dni = pgp_sym_encrypt(NEW.dni, current_setting('app.crypto_key', true)),
+            cuil = pgp_sym_encrypt(NEW.cuil, current_setting('app.crypto_key', true)),
+            nombre = pgp_sym_encrypt(NEW.nombre, current_setting('app.crypto_key', true)),
+            apellido = pgp_sym_encrypt(NEW.apellido, current_setting('app.crypto_key', true)),
+            fecha_nacimiento = NEW.fecha_nacimiento,
+            edad = NEW.edad,
+            lugar_nacimiento = NEW.lugar_nacimiento,
+            nacionalidad = NEW.nacionalidad,
+            primaria_origen = NEW.primaria_origen,
+            secundario_incompleto = NEW.secundario_incompleto,
+            analitico_parcial = NEW.analitico_parcial,
+            id_estado = NEW.id_estado,
+            id_motivo_baja = NEW.id_motivo_baja
+        WHERE id_alumno = OLD.id_alumno;
+        RETURN NEW;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_alumnos_upsert_trigger
+INSTEAD OF INSERT OR UPDATE ON alumnos
+FOR EACH ROW EXECUTE FUNCTION trg_alumnos_upsert();

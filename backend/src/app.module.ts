@@ -7,7 +7,7 @@ import { CryptoModule } from './crypto/crypto.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { StudentsModule } from './students/students.module';
-import { TeachersModule } from './teachers/teachers.module';
+import { StaffModule } from './staff/staff.module';
 import { AcademicsModule } from './academics/academics.module';
 import { AssignmentsModule } from './assignments/assignments.module';
 import { GradesModule } from './grades/grades.module';
@@ -17,6 +17,7 @@ import { AttendanceModule } from './attendance/attendance.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { AuditModule } from './audit/audit.module';
 import { ConfigAlertasModule } from './config-alertas/config-alertas.module';
+import { CatalogsModule } from './catalogs/catalogs.module';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { ConfigAlertasModule } from './config-alertas/config-alertas.module';
         from: '"Modularis CENS" <noreply@modularis.com>',
       },
     }),
-    CryptoModule, PrismaModule, AuthModule, UsersModule, StudentsModule, TeachersModule, AcademicsModule, AssignmentsModule, GradesModule, InstitutionModule, AttendanceModule, NotificationsModule, AuditModule, ConfigAlertasModule],
+    CryptoModule, PrismaModule, AuthModule, UsersModule, StudentsModule, StaffModule, AcademicsModule, AssignmentsModule, GradesModule, InstitutionModule, AttendanceModule, NotificationsModule, AuditModule, ConfigAlertasModule, CatalogsModule],
   controllers: [AppController],
   providers: [AppService],
 })

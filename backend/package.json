@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "db:reset": "ts-node prisma/reset-db.ts && npx prisma generate && npm run prisma:seed",
     "prisma:seed": "ts-node prisma/seed.ts",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

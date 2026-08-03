@@ -21,12 +21,19 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateAssignmentDto.prototype, "id_personal", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 1, description: 'ID de la materia' }),
+    (0, swagger_1.ApiProperty)({ example: 'CUP-1234', description: 'CUPOF de la designación' }),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateAssignmentDto.prototype, "cupof", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 1, description: 'ID de la materia (opcional)' }),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CreateAssignmentDto.prototype, "id_materia", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 1, description: 'ID del curso o sección asignada' }),
+    (0, swagger_1.ApiPropertyOptional)({ example: 1, description: 'ID del curso o sección asignada (opcional)' }),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CreateAssignmentDto.prototype, "id_curso_seccion", void 0);

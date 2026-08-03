@@ -6,13 +6,19 @@ export class CreateAssignmentDto {
   @IsInt()
   id_personal: number;
 
-  @ApiProperty({ example: 1, description: 'ID de la materia' })
-  @IsInt()
-  id_materia: number;
+  @ApiProperty({ example: 'CUP-1234', description: 'CUPOF de la designación' })
+  @IsString()
+  cupof: string;
 
-  @ApiProperty({ example: 1, description: 'ID del curso o sección asignada' })
+  @ApiPropertyOptional({ example: 1, description: 'ID de la materia (opcional)' })
+  @IsOptional()
   @IsInt()
-  id_curso_seccion: number;
+  id_materia?: number;
+
+  @ApiPropertyOptional({ example: 1, description: 'ID del curso o sección asignada (opcional)' })
+  @IsOptional()
+  @IsInt()
+  id_curso_seccion?: number;
 
   @ApiProperty({ example: '2023-03-01', description: 'Fecha de toma de posesión' })
   @IsDateString()
@@ -44,3 +50,4 @@ export class CreateAssignmentDto {
   @IsString()
   fundamentacion_baja_nota?: string;
 }
+
