@@ -46,6 +46,11 @@ export class UsersService {
       const existing = await tx.usuario.findUnique({ where: { username: data.username } });
       if (existing) throw new ConflictException('El usuario ya está registrado');
 
+      if (data.id_personal) {
+        const existingPersonal = await tx.usuario.findFirst({ where: { id_personal: data.id_personal } });
+        if (existingPersonal) throw new ConflictException('Ya existe un usuario asociado a este personal docente');
+      }
+
       const hashedPassword = await bcrypt.hash(data.password, 10);
 
       return tx.usuario.create({

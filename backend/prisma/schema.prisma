@@ -160,7 +160,7 @@ model PersonalDocente {
 
   designaciones Designacion[]
   inasistencias InasistenciasDiariasDocentes[]
-  usuarios      Usuario[]
+  usuario       Usuario?
 
   @@map("personal_docente")
 }
@@ -170,7 +170,7 @@ model Usuario {
   username      String  @unique @db.VarChar(255)
   password_hash String  @db.VarChar(255)
   id_rol        Int
-  id_personal   Int?
+  id_personal   Int?    @unique
   activo        Boolean @default(true)
 
   rol                Rol                     @relation(fields: [id_rol], references: [id_rol])

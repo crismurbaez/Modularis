@@ -53,6 +53,11 @@ let UsersService = class UsersService {
             const existing = await tx.usuario.findUnique({ where: { username: data.username } });
             if (existing)
                 throw new common_1.ConflictException('El usuario ya está registrado');
+            if (data.id_personal) {
+                const existingPersonal = await tx.usuario.findFirst({ where: { id_personal: data.id_personal } });
+                if (existingPersonal)
+                    throw new common_1.ConflictException('Ya existe un usuario asociado a este personal docente');
+            }
             const hashedPassword = await bcrypt.hash(data.password, 10);
             return tx.usuario.create({
                 data: {

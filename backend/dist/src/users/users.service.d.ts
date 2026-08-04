@@ -56,9 +56,9 @@ export declare class UsersService {
     } & {
         id_usuario: number;
         username: string;
+        id_personal: number | null;
         password_hash: string;
         id_rol: number;
-        id_personal: number | null;
         activo: boolean;
     }>;
     create(data: any): Promise<{
