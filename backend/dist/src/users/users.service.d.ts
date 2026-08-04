@@ -1,6 +1,7 @@
 import { PrismaService } from '../prisma/prisma.service';
 export declare class UsersService {
     private readonly prisma;
+    private cryptoKey;
     constructor(prisma: PrismaService);
     findAll(): Promise<{
         rol: {
