@@ -18,6 +18,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { AuditModule } from './audit/audit.module';
 import { ConfigAlertasModule } from './config-alertas/config-alertas.module';
 import { CatalogsModule } from './catalogs/catalogs.module';
+import { SubjectsModule } from './subjects/subjects.module';
 
 @Module({
   imports: [
@@ -36,7 +37,7 @@ import { CatalogsModule } from './catalogs/catalogs.module';
         from: '"Modularis CENS" <noreply@modularis.com>',
       },
     }),
-    CryptoModule, PrismaModule, AuthModule, UsersModule, StudentsModule, StaffModule, AcademicsModule, AssignmentsModule, GradesModule, InstitutionModule, AttendanceModule, NotificationsModule, AuditModule, ConfigAlertasModule, CatalogsModule],
+    CryptoModule, PrismaModule, AuthModule, UsersModule, StudentsModule, StaffModule, AcademicsModule, AssignmentsModule, GradesModule, InstitutionModule, AttendanceModule, NotificationsModule, AuditModule, ConfigAlertasModule, CatalogsModule, SubjectsModule],
   controllers: [AppController],
   providers: [AppService],
 })

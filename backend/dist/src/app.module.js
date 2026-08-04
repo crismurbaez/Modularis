@@ -27,6 +27,7 @@ const notifications_module_1 = require("./notifications/notifications.module");
 const audit_module_1 = require("./audit/audit.module");
 const config_alertas_module_1 = require("./config-alertas/config-alertas.module");
 const catalogs_module_1 = require("./catalogs/catalogs.module");
+const subjects_module_1 = require("./subjects/subjects.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -48,7 +49,7 @@ exports.AppModule = AppModule = __decorate([
                     from: '"Modularis CENS" <noreply@modularis.com>',
                 },
             }),
-            crypto_module_1.CryptoModule, prisma_module_1.PrismaModule, auth_module_1.AuthModule, users_module_1.UsersModule, students_module_1.StudentsModule, staff_module_1.StaffModule, academics_module_1.AcademicsModule, assignments_module_1.AssignmentsModule, grades_module_1.GradesModule, institution_module_1.InstitutionModule, attendance_module_1.AttendanceModule, notifications_module_1.NotificationsModule, audit_module_1.AuditModule, config_alertas_module_1.ConfigAlertasModule, catalogs_module_1.CatalogsModule
+            crypto_module_1.CryptoModule, prisma_module_1.PrismaModule, auth_module_1.AuthModule, users_module_1.UsersModule, students_module_1.StudentsModule, staff_module_1.StaffModule, academics_module_1.AcademicsModule, assignments_module_1.AssignmentsModule, grades_module_1.GradesModule, institution_module_1.InstitutionModule, attendance_module_1.AttendanceModule, notifications_module_1.NotificationsModule, audit_module_1.AuditModule, config_alertas_module_1.ConfigAlertasModule, catalogs_module_1.CatalogsModule, subjects_module_1.SubjectsModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

@@ -24,7 +24,6 @@ let CatalogsService = class CatalogsService {
             'condicionMateria',
             'causaInasistenciaAlumnos',
             'motivoInasistenciasDocentes',
-            'materia',
             'calendarioAcademico'
         ];
     }
@@ -78,7 +77,6 @@ let CatalogsService = class CatalogsService {
             'condicionMateria': 'id_condicion',
             'causaInasistenciaAlumnos': 'id_causa',
             'motivoInasistenciasDocentes': 'id_motivo',
-            'materia': 'id_materia',
             'calendarioAcademico': 'id_calendario'
         };
         return map[catalog] || 'id';
