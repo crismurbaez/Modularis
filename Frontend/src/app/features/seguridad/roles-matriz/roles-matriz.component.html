@@ -1,0 +1,41 @@
+<div class="page-container">
+  <div class="header-actions">
+    <div>
+      <h1>Matriz de Roles y Permisos</h1>
+      <p class="subtitle">Asignación de privilegios por rol</p>
+    </div>
+    <app-button variant="primary" (onClick)="guardarMatriz()">
+      Guardar Cambios
+    </app-button>
+  </div>
+
+  <app-card padding="none">
+    <div class="table-container">
+      <table class="matriz-table">
+        <thead>
+          <tr>
+            <th class="col-permiso">Módulo / Permiso</th>
+            <th *ngFor="let rol of roles" class="text-center">{{ rol }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let permiso of permisos">
+            <td>
+              <div class="permiso-info">
+                <span class="modulo-label">{{ permiso.modulo }}</span>
+                <span class="permiso-nombre">{{ permiso.nombre }}</span>
+              </div>
+            </td>
+            <td *ngFor="let rol of roles" class="text-center">
+              <label class="checkbox-container">
+                <!-- @ts-ignore -->
+                <input type="checkbox" [checked]="permiso.valores[rol]" (change)="togglePermiso(permiso.id, rol)">
+                <span class="checkmark"></span>
+              </label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </app-card>
+</div>

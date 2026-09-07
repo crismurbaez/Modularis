@@ -1,0 +1,47 @@
+<div class="page-container">
+  <div class="header-actions">
+    <div>
+      <h1>Gestión de Usuarios</h1>
+      <p class="subtitle">Administración de accesos y cuentas del sistema</p>
+    </div>
+    <app-button variant="primary">
+      <app-icon name="plus" [size]="18" style="margin-right: 0.5rem;"></app-icon>
+      Nuevo Usuario
+    </app-button>
+  </div>
+
+  <app-table [columns]="columns" [data]="usuarios">
+    <ng-template #cellTemplate let-row let-col="column">
+      
+      <!-- Custom rendering depending on the column -->
+      <ng-container [ngSwitch]="col.key">
+        
+        <span *ngSwitchCase="'username'" class="font-medium">{{ row.username }}</span>
+        
+        <span *ngSwitchCase="'rol'">
+          <app-badge variant="neutral">{{ row.rol }}</app-badge>
+        </span>
+        
+        <span *ngSwitchCase="'estado'">
+          <app-badge [variant]="row.estado === 'Activo' ? 'success' : 'error'">
+            {{ row.estado }}
+          </app-badge>
+        </span>
+        
+        <div *ngSwitchCase="'acciones'" class="actions-cell">
+          <app-button variant="tertiary">
+            <app-icon name="edit-2" [size]="18"></app-icon>
+          </app-button>
+          <app-button variant="tertiary" [disabled]="row.estado === 'Inactivo'">
+            <app-icon name="user-x" [size]="18"></app-icon>
+          </app-button>
+        </div>
+        
+        <!-- Default rendering -->
+        <span *ngSwitchDefault>{{ row[col.key] }}</span>
+        
+      </ng-container>
+      
+    </ng-template>
+  </app-table>
+</div>
