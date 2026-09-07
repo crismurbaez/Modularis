@@ -1,0 +1,35 @@
+<div class="modal-backdrop" *ngIf="isOpen" (click)="closeModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h2>{{ title }}</h2>
+      <button class="close-btn" (click)="closeModal()" [disabled]="isGeneratingPDF">
+        <app-icon name="x" [size]="24"></app-icon>
+      </button>
+    </div>
+
+    <div class="modal-body print-preview-area">
+      <!-- El contenido proyectado simulará la hoja A4 -->
+      <div class="paper-sheet" [ngClass]="documentType">
+        <ng-content></ng-content>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <app-button variant="secondary" (onClick)="closeModal()" [disabled]="isGeneratingPDF">
+        Cancelar
+      </app-button>
+      <app-button variant="primary" (onClick)="handleDownload()" [disabled]="isGeneratingPDF">
+        <app-icon name="printer" [size]="18" style="margin-right: 0.5rem;"></app-icon>
+        Imprimir / Descargar PDF Oficial
+      </app-button>
+    </div>
+    
+  </div>
+</div>
+
+<app-spinner 
+  *ngIf="isGeneratingPDF" 
+  [fullScreen]="true" 
+  text="Generando Documento Oficial. Por favor espere...">
+</app-spinner>

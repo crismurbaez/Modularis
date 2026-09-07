@@ -1,0 +1,121 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.5); /* Slate 900 semi-transparent */
+  backdrop-filter: blur(2px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background-color: var(--color-background);
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-surface);
+}
+
+.modal-header h2 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: var(--color-error-text);
+}
+
+.close-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modal-body {
+  padding: 2rem;
+  overflow-y: auto;
+  background-color: #E2E8F0; /* Slate 200 background to contrast the white paper */
+  display: flex;
+  justify-content: center;
+}
+
+[data-theme="dark"] .modal-body {
+  background-color: #0F172A; /* Slate 900 for dark mode */
+}
+
+/* Paper Sheet Simulation */
+.paper-sheet {
+  background-color: #FFFFFF;
+  box-shadow: var(--shadow-md);
+  color: #000000; /* Docs are usually black text */
+  margin: 0 auto;
+}
+
+.paper-sheet.A4 {
+  width: 21cm;
+  min-height: 29.7cm;
+  padding: 2cm;
+}
+
+.paper-sheet.Legal {
+  width: 21.59cm;
+  min-height: 35.56cm;
+  padding: 2cm;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  background-color: var(--color-surface);
+}
+
+/* MEDIA PRINT RULE */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .paper-sheet, .paper-sheet * {
+    visibility: visible;
+  }
+  
+  .paper-sheet {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+}
