@@ -1,0 +1,26 @@
+<div class="table-container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th *ngFor="let col of columns">{{ col.label }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of data">
+        <td *ngFor="let col of columns">
+          <ng-container *ngIf="cellTemplate; else defaultCell">
+            <ng-container *ngTemplateOutlet="cellTemplate; context: { $implicit: row, column: col }"></ng-container>
+          </ng-container>
+          <ng-template #defaultCell>
+            {{ row[col.key] }}
+          </ng-template>
+        </td>
+      </tr>
+      <tr *ngIf="data.length === 0">
+        <td [attr.colspan]="columns.length" class="text-center empty-state">
+          No hay datos disponibles
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
