@@ -1,0 +1,54 @@
+<div class="page-container">
+  <div class="header-actions">
+    <div>
+      <h1>Designaciones Docentes</h1>
+      <p class="subtitle">Asignar un profesor a una materia y situación de revista</p>
+    </div>
+  </div>
+
+  <app-card padding="lg">
+    <form [formGroup]="designacionForm" class="form-layout">
+      
+      <div class="form-group">
+        <app-input 
+          formControlName="profesor" 
+          label="Profesor (DNI o Apellido)" 
+          placeholder="Autocompletar profesor..."
+          [error]="designacionForm.get('profesor')?.touched && designacionForm.get('profesor')?.invalid ? 'Requerido' : ''">
+        </app-input>
+      </div>
+
+      <div class="form-group">
+        <app-input 
+          formControlName="materia_cupof" 
+          label="Materia / CUPOF" 
+          placeholder="Autocompletar CUPOF..."
+          [error]="designacionForm.get('materia_cupof')?.touched && designacionForm.get('materia_cupof')?.invalid ? 'Requerido' : ''">
+        </app-input>
+      </div>
+
+      <div class="form-group">
+        <label class="native-label">Situación de Revista</label>
+        <select formControlName="situacion_revista" class="native-select">
+          <option value="Titular">Titular</option>
+          <option value="Provisional">Provisional</option>
+          <option value="Suplente">Suplente</option>
+        </select>
+      </div>
+
+      <div class="form-group animation-fade" *ngIf="showCuilReemplazado">
+        <app-input 
+          formControlName="cuil_reemplazado" 
+          label="CUIL del Profesor Reemplazado" 
+          placeholder="Ingrese 11 dígitos"
+          [error]="designacionForm.get('cuil_reemplazado')?.touched && designacionForm.get('cuil_reemplazado')?.invalid ? 'CUIL requerido e inválido' : ''">
+        </app-input>
+      </div>
+
+      <div class="form-footer">
+        <app-button variant="primary" (onClick)="guardar()">Asignar Cargo</app-button>
+      </div>
+      
+    </form>
+  </app-card>
+</div>

@@ -1,0 +1,27 @@
+<div class="page-container">
+  <div class="header-actions">
+    <div>
+      <h1>Inasistencias (S.E.T. 4)</h1>
+      <p class="subtitle">Resumen mensual de inasistencias docentes</p>
+    </div>
+    <app-button variant="secondary">
+      Exportar Planilla
+    </app-button>
+  </div>
+
+  <app-table [columns]="columns" [data]="datos">
+    <ng-template #cellTemplate let-row let-col="column">
+      
+      <ng-container [ngSwitch]="col.key">
+        <span *ngSwitchCase="'docente'" class="font-medium">{{ row.docente }}</span>
+        
+        <span *ngSwitchCase="'total'" class="font-semibold text-accent">
+          {{ row.total }}
+        </span>
+        
+        <span *ngSwitchDefault>{{ row[col.key] }}</span>
+      </ng-container>
+      
+    </ng-template>
+  </app-table>
+</div>

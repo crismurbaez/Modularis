@@ -1,0 +1,76 @@
+<div class="page-container">
+  <div class="header-actions">
+    <div>
+      <h1>Alta de Docente</h1>
+      <p class="subtitle">Registrar un nuevo profesor o preceptor en el sistema</p>
+    </div>
+    <div class="actions">
+      <app-button variant="secondary">Cancelar</app-button>
+      <app-button variant="primary" (onClick)="guardar()" [disabled]="docenteForm.invalid || docenteForm.pending">
+        Guardar Docente
+      </app-button>
+    </div>
+  </div>
+
+  <app-card padding="lg">
+    <form [formGroup]="docenteForm" class="form-grid">
+      
+      <div class="form-group">
+        <app-input 
+          formControlName="nombre" 
+          label="Nombre(s)" 
+          placeholder="Ej: Juan Pablo"
+          [error]="(f['nombre'].touched && f['nombre'].invalid) ? 'El nombre es requerido' : ''">
+        </app-input>
+      </div>
+
+      <div class="form-group">
+        <app-input 
+          formControlName="apellido" 
+          label="Apellido(s)" 
+          placeholder="Ej: Pérez"
+          [error]="(f['apellido'].touched && f['apellido'].invalid) ? 'El apellido es requerido' : ''">
+        </app-input>
+      </div>
+
+      <div class="form-group">
+        <app-input 
+          formControlName="dni" 
+          label="DNI" 
+          placeholder="Sin puntos"
+          [error]="(f['dni'].touched && f['dni'].invalid) ? 'DNI inválido' : ''">
+        </app-input>
+      </div>
+
+      <div class="form-group">
+        <app-input 
+          formControlName="cuil" 
+          label="CUIL" 
+          placeholder="Sin guiones"
+          [error]="(f['cuil'].touched && f['cuil'].invalid) ? 'CUIL inválido (11 dígitos)' : ''">
+        </app-input>
+      </div>
+
+      <div class="form-group col-span-2">
+        <app-input 
+          formControlName="mail_abc" 
+          label="Correo Oficial (@abc.gob.ar)" 
+          placeholder="usuario@abc.gob.ar">
+        </app-input>
+        <div class="error-msg" *ngIf="f['mail_abc'].touched && f['mail_abc'].errors?.['required']">El correo es requerido</div>
+        <div class="error-msg" *ngIf="f['mail_abc'].touched && f['mail_abc'].errors?.['email']">Formato de correo inválido</div>
+        <div class="error-msg" *ngIf="f['mail_abc'].touched && f['mail_abc'].errors?.['invalidAbcDomain']">Debe pertenecer al dominio @abc.gob.ar</div>
+        <div class="pending-msg" *ngIf="f['mail_abc'].pending">Validando dominio...</div>
+      </div>
+
+      <div class="form-group">
+        <app-input 
+          formControlName="telefono" 
+          label="Teléfono de Contacto" 
+          placeholder="Ej: 2215555555">
+        </app-input>
+      </div>
+      
+    </form>
+  </app-card>
+</div>
