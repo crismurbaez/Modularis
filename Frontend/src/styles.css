@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  /* Color Palette - Light Mode */
+  --color-primary: #1E293B; /* Azul Marino (Slate 800) */
+  --color-accent: #D4AF37; /* Dorado Clásico */
+  --color-accent-hover: #C5A017;
+  
+  --color-background: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #F1F5F9;
+  
+  --color-text-main: #334155;
+  --color-text-muted: #64748B;
+  --color-text-inverse: #FFFFFF;
+  
+  --color-border: #E2E8F0;
+  --color-border-focus: #1E293B;
+  
+  /* Status Colors */
+  --color-success-bg: #DCFCE7;
+  --color-success-text: #15803D;
+  --color-alert-bg: #FEF9C3;
+  --color-alert-text: #A16207;
+  --color-error-bg: #FEE2E2;
+  --color-error-text: #B91C1C;
+  
+  /* Typography */
+  --font-family: 'Inter', sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  
+  /* Layout & Spacing */
+  --border-radius-md: 6px;
+  --border-radius-lg: 8px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="dark"] {
+  /* Color Palette - Dark Mode */
+  --color-primary: #0F172A; /* Azul Marino muy oscuro */
+  --color-accent: #FDE047; /* Dorado Brillante */
+  --color-accent-hover: #EAB308;
+  
+  --color-background: #020617; /* Slate 950 */
+  --color-surface: #1E293B; /* Slate 800 */
+  --color-surface-hover: #334155; /* Slate 700 */
+  
+  --color-text-main: #F8FAFC;
+  --color-text-muted: #94A3B8;
+  --color-text-inverse: #020617;
+  
+  --color-border: #334155;
+  --color-border-focus: #FDE047;
+  
+  /* Status Colors for Dark Mode */
+  --color-success-bg: rgba(21, 128, 61, 0.2);
+  --color-success-text: #4ADE80;
+  --color-alert-bg: rgba(161, 98, 7, 0.2);
+  --color-alert-text: #FDE047;
+  --color-error-bg: rgba(185, 28, 28, 0.2);
+  --color-error-text: #F87171;
+}
+
+/* Base Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-background);
+  color: var(--color-text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] h1, 
+[data-theme="dark"] h2, 
+[data-theme="dark"] h3, 
+[data-theme="dark"] h4, 
+[data-theme="dark"] h5, 
+[data-theme="dark"] h6 {
+  color: var(--color-text-main);
+}

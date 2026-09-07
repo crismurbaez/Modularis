@@ -6,6 +6,10 @@
 -- 3. Reemplaza el texto 'HASH_AQUI' en las siguientes sentencias SQL por tu hash generado.
 -- 4. Ejecuta estas sentencias en tu gestor de base de datos (pgAdmin, DBeaver, etc.)
 
+-- IMPORTANTE: Configurar la llave de encriptación para esta sesión
+-- Reemplaza 'esdificilquelasepas' si tu CRYPTO_KEY en .env es diferente.
+SET LOCAL app.crypto_key = 'esdificilquelasepas';
+
 -- ==========================================
 -- CREACIÓN DEL SUPERADMINISTRADOR (Oculto)
 -- ==========================================
@@ -15,12 +19,11 @@ VALUES ('superadmin', 'HASH_AQUI', 1, true);
 -- ==========================================
 -- CREACIÓN DE LA DIRECTORA (Yanina)
 -- ==========================================
--- A. Crear primero sus datos personales (Si tienes un hash para el DNI/CUIL, reemplázalo aquí, 
---    pero si en esta instancia no está encriptado, puedes dejarlo así si tu backend lo manejará luego, 
---    aunque lo ideal es que insertes los hashes generados por el CryptoService).
+-- A. Crear primero sus datos personales
 INSERT INTO personal_docente (dni, cuil, nombre, apellido)
 VALUES ('00000000', '27000000000', 'Yanina', 'Poncela');
 
--- B. Obtener el id_personal recién creado y asignarlo al usuario. (Suponiendo que es el id_personal = 1)
+-- B. Obtener el id_personal recién creado y asignarlo al usuario.
 INSERT INTO usuarios (username, password_hash, id_rol, id_personal, activo)
 VALUES ('00000000', 'HASH_AQUI', 2, (SELECT id_personal FROM personal_docente WHERE dni = '00000000'), true);
+
