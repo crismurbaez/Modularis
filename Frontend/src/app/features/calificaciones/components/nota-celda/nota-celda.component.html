@@ -1,0 +1,10 @@
+<input
+  type="text"
+  [value]="value"
+  [placeholder]="placeholder"
+  [disabled]="disabled"
+  [class.error-cell]="hasError"
+  class="nota-input"
+  (input)="onInput($event)"
+  (blur)="onTouched()"
+/>

@@ -1,0 +1,66 @@
+<div class="page-container">
+  <div class="header-actions">
+    <div>
+      <h1>Calificaciones</h1>
+      <p class="subtitle">Carga masiva de notas y faltas - Matemáticas 3º Año</p>
+    </div>
+    <app-button variant="primary" (onClick)="guardar()" [disabled]="grillaForm.invalid">
+      Guardar Planilla
+    </app-button>
+  </div>
+
+  <form [formGroup]="grillaForm" class="grilla-form">
+    
+    <!-- Vista Desktop: Tabla Matriz Excel-like -->
+    <div class="desktop-view table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Alumno</th>
+            <th class="text-center">Nota C1</th>
+            <th class="text-center">Faltas C1</th>
+            <th class="text-center">Nota C2</th>
+            <th class="text-center">Faltas C2</th>
+          </tr>
+        </thead>
+        <tbody formArrayName="filas">
+          <tr *ngFor="let row of filas.controls; let i = index" [formGroupName]="i">
+            <td class="font-medium">{{ row.get('nombre')?.value }}</td>
+            <td class="text-center">
+              <app-nota-celda 
+                formControlName="nota_cuat1"
+                [hasError]="row.get('nota_cuat1')?.invalid && row.get('nota_cuat1')?.touched || false">
+              </app-nota-celda>
+            </td>
+            <td class="text-center">
+              <app-nota-celda formControlName="faltas_cuat1"></app-nota-celda>
+            </td>
+            <td class="text-center">
+              <app-nota-celda 
+                formControlName="nota_cuat2"
+                [hasError]="row.get('nota_cuat2')?.invalid && row.get('nota_cuat2')?.touched || false">
+              </app-nota-celda>
+            </td>
+            <td class="text-center">
+              <app-nota-celda formControlName="faltas_cuat2"></app-nota-celda>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Vista Mobile: Lista de Tarjetas Colapsables -->
+    <div class="mobile-view">
+      <div formArrayName="filas">
+        <app-alumno-card-mobile
+          *ngFor="let row of filas.controls; let i = index"
+          [formGroup]="$any(row)"
+          [alumnoName]="row.get('nombre')?.value"
+          [isExpanded]="expandedRowIndex === i"
+          (toggle)="toggleRow(i)">
+        </app-alumno-card-mobile>
+      </div>
+    </div>
+    
+  </form>
+</div>

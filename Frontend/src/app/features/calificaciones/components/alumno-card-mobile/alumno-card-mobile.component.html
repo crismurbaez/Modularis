@@ -1,0 +1,46 @@
+<app-card padding="none" class="alumno-card">
+  <div class="card-header" (click)="onToggle()">
+    <div class="header-info">
+      <span class="alumno-name">{{ alumnoName }}</span>
+      <app-badge *ngIf="formGroup.invalid" variant="error">Errores</app-badge>
+      <app-badge *ngIf="formGroup.valid" variant="success">OK</app-badge>
+    </div>
+    <div class="chevron" [class.expanded]="isExpanded">
+      ▼
+    </div>
+  </div>
+  
+  <div class="card-body" *ngIf="isExpanded" [formGroup]="formGroup">
+    <div class="form-grid">
+      <div class="field-group">
+        <label>Nota C1</label>
+        <app-nota-celda 
+          formControlName="nota_cuat1" 
+          [hasError]="formGroup.get('nota_cuat1')?.invalid && formGroup.get('nota_cuat1')?.touched || false">
+        </app-nota-celda>
+      </div>
+      
+      <div class="field-group">
+        <label>Faltas C1</label>
+        <app-nota-celda 
+          formControlName="faltas_cuat1">
+        </app-nota-celda>
+      </div>
+      
+      <div class="field-group">
+        <label>Nota C2</label>
+        <app-nota-celda 
+          formControlName="nota_cuat2"
+          [hasError]="formGroup.get('nota_cuat2')?.invalid && formGroup.get('nota_cuat2')?.touched || false">
+        </app-nota-celda>
+      </div>
+
+      <div class="field-group">
+        <label>Faltas C2</label>
+        <app-nota-celda 
+          formControlName="faltas_cuat2">
+        </app-nota-celda>
+      </div>
+    </div>
+  </div>
+</app-card>
