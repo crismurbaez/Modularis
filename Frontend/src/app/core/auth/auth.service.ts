@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, Signal } from '@angular/core';
 
 export interface User {
   id_usuario: number;
@@ -26,9 +26,9 @@ export class AuthService {
   });
 
   // Selectores computados expuestos al exterior
-  readonly user = computed(() => this.state().user);
-  readonly token = computed(() => this.state().token);
-  readonly isAuthenticated = computed(() => this.state().isAuthenticated);
+  readonly user: Signal<User | null> = computed(() => this.state().user);
+  readonly token: Signal<string | null> = computed(() => this.state().token);
+  readonly isAuthenticated: Signal<boolean> = computed(() => this.state().isAuthenticated);
 
   constructor() {
     this.checkInitialSession();

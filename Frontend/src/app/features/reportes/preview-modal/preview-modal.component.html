@@ -1,0 +1,63 @@
+<div class="reportes-page">
+  <div class="actions-header no-print">
+    <div>
+      <h1>Previsualización de Documento</h1>
+      <p>Revisa los datos antes de generar el documento oficial ({{ tipoReporte }})</p>
+    </div>
+    <app-button variant="primary" (onClick)="descargarOficial()" [disabled]="isGeneratingPdf">
+      Imprimir / Descargar PDF Oficial
+    </app-button>
+  </div>
+
+  <!-- A4 Paper Simulation -->
+  <div class="paper-wrapper">
+    <div class="paper-a4">
+      <header class="doc-header">
+        <img src="assets/logo-dgcye.png" alt="Logo DGCyE" class="doc-logo" *ngIf="false" />
+        <div class="doc-title-area">
+          <h2>{{ previewData?.titulo || 'Cargando...' }}</h2>
+          <h3>Dirección General de Cultura y Educación</h3>
+        </div>
+      </header>
+      
+      <main class="doc-content">
+        <p>{{ previewData?.contenido }}</p>
+        
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th>Dato</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ejemplo de fila</td>
+              <td>12345</td>
+            </tr>
+            <tr>
+              <td>Otro dato</td>
+              <td>Activo</td>
+            </tr>
+          </tbody>
+        </table>
+      </main>
+
+      <footer class="doc-footer">
+        <p>Firma Director/a</p>
+        <p>Sello de la Institución</p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Spinner Overlay durante la generación del PDF con Puppeteer -->
+  @if (isGeneratingPdf) {
+    <div class="spinner-overlay no-print">
+      <div class="spinner-container">
+        <div class="spinner"></div>
+        <h3>Generando Documento Oficial...</h3>
+        <p>Por favor, espere un momento.</p>
+      </div>
+    </div>
+  }
+</div>

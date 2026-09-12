@@ -13,7 +13,7 @@ import { ButtonComponent } from '../../../shared/components/button/button.compon
 export class RolesMatrizComponent implements OnInit {
   roles = ['Admin', 'Directivo', 'Preceptor', 'Docente'];
   
-  permisos = [
+  permisos: { id: string, modulo: string, nombre: string, valores: { [key: string]: boolean } }[] = [
     { id: 'p1', modulo: 'Calificaciones', nombre: 'Ver Grillas', valores: { 'Admin': true, 'Directivo': true, 'Preceptor': true, 'Docente': true } },
     { id: 'p2', modulo: 'Calificaciones', nombre: 'Cargar Notas', valores: { 'Admin': true, 'Directivo': false, 'Preceptor': true, 'Docente': true } },
     { id: 'p3', modulo: 'Documentos', nombre: 'Imprimir Analítico', valores: { 'Admin': true, 'Directivo': true, 'Preceptor': true, 'Docente': false } },

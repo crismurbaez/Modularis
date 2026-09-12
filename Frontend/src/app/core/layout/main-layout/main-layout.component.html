@@ -1,0 +1,45 @@
+<div class="layout-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>Modularis</h2>
+    </div>
+    <nav class="sidebar-nav">
+      <ul>
+        <li><a routerLink="/calificaciones" routerLinkActive="active">Calificaciones</a></li>
+        <li><a routerLink="/docentes" routerLinkActive="active">Docentes</a></li>
+        <li><a routerLink="/academico" routerLinkActive="active">Académico</a></li>
+        <li><a routerLink="/reportes" routerLinkActive="active">Reportes</a></li>
+        <li><a routerLink="/seguridad" routerLinkActive="active">Seguridad</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="main-area">
+    <!-- Header -->
+    <header class="top-header">
+      <div class="header-title">
+        <!-- Puedes colocar el breadcrumb o título de sección aquí -->
+        <span>Gestión CENS</span>
+      </div>
+      <div class="header-actions">
+        <!-- Mostrar info del usuario usando el Signal -->
+        @if (authService.user(); as user) {
+          <span class="user-name">Hola, {{ user.username }}</span>
+        }
+        
+        <button class="icon-btn" (click)="toggleTheme()" title="Cambiar Tema">
+          <!-- Icono de sol/luna (simulado) -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+        </button>
+        <button class="logout-btn" (click)="logout()">Salir</button>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="content-container">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
