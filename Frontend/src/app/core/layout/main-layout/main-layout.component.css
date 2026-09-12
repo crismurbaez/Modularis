@@ -26,6 +26,7 @@
   font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: 1px;
+  color: #F8FAFC; /* Siempre texto claro porque el fondo es oscuro */
 }
 
 .sidebar-nav {

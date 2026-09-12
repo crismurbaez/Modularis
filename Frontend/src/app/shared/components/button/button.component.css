@@ -24,9 +24,10 @@
 
 /* Primary Variant */
 .btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-text-inverse);
+  background-color: var(--color-accent);
+  color: #0F172A; /* Siempre oscuro para buen contraste con el dorado */
   box-shadow: var(--shadow-sm);
+  font-weight: 600;
 }
 .btn-primary:hover:not(:disabled) {
   opacity: 0.9;

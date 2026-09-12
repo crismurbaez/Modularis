@@ -20,7 +20,7 @@ h1 {
 
 .content-grid {
   display: grid;
-  grid-template-columns: 350px 1fr;
+  grid-template-columns: minmax(400px, 1fr) 2fr;
   gap: 2rem;
   align-items: start;
 }
@@ -45,11 +45,13 @@ h1 {
 
 .row-flex {
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 1rem;
 }
 
 .flex-1 {
-  flex: 1;
+  flex: 1 1 150px;
+  min-width: 0;
 }
 
 .native-label {
