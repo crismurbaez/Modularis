@@ -23,7 +23,7 @@ h1 {
 
 .font-medium {
   font-weight: var(--font-weight-medium);
-  color: var(--color-primary);
+  color: var(--color-text-primary);
 }
 
 .actions-cell {

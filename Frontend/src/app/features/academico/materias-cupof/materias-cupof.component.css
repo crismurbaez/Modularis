@@ -28,7 +28,7 @@ h1 {
 .form-section h3 {
   font-size: 1.125rem;
   margin-bottom: 1.5rem;
-  color: var(--color-primary);
+  color: var(--color-text-primary);
 }
 
 .form-layout {
