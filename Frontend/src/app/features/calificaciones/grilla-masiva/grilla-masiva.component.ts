@@ -18,6 +18,7 @@ export class GrillaMasivaComponent implements OnInit {
   expandedRowIndex: number = -1;
   calificacionesService = inject(CalificacionesService);
   isSaving = false;
+  hasUnsavedChanges = false;
 
   // Mock data for UI demonstration
   alumnos = [
@@ -29,9 +30,30 @@ export class GrillaMasivaComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
+    const savedData = localStorage.getItem('calificaciones_borrador');
+    if (savedData) {
+      try {
+        this.alumnos = JSON.parse(savedData);
+      } catch(e) {
+        console.error('Error parseando datos guardados localmente', e);
+      }
+    }
+
     this.grillaForm = this.fb.group({
       filas: this.fb.array(this.alumnos.map(a => this.crearFila(a)))
     });
+
+    this.grillaForm.valueChanges.subscribe(val => {
+      localStorage.setItem('calificaciones_borrador', JSON.stringify(val.filas));
+      this.hasUnsavedChanges = true;
+    });
+  }
+
+  canDeactivate(): boolean {
+    if (this.hasUnsavedChanges) {
+      return confirm('Tienes cambios sin guardar. ¿Estás seguro de que quieres abandonar esta página? Tus datos locales se mantendrán para la próxima vez.');
+    }
+    return true;
   }
 
   get filas() {
@@ -43,11 +65,11 @@ export class GrillaMasivaComponent implements OnInit {
       id: [alumno.id],
       nombre: [alumno.nombre],
       // Validación: entre 1 y 10, o el texto "S/CALIFICAR"
-      nota_cuat1: [alumno.nota1, [Validators.pattern('^([1-9]|10|S/CALIFICAR)$')]],
-      faltas_cuat1: [alumno.faltas1, [Validators.min(0)]],
-      nota_cuat2: [alumno.nota2, [Validators.pattern('^([1-9]|10|S/CALIFICAR)$')]],
-      faltas_cuat2: [alumno.faltas2, [Validators.min(0)]]
-    });
+      nota_cuat1: [alumno.nota_cuat1 || alumno.nota1, [Validators.pattern('^([1-9]|10|S/CALIFICAR)$')]],
+      faltas_cuat1: [alumno.faltas_cuat1 || alumno.faltas1, [Validators.min(0)]],
+      nota_cuat2: [alumno.nota_cuat2 || alumno.nota2, [Validators.pattern('^([1-9]|10|S/CALIFICAR)$')]],
+      faltas_cuat2: [alumno.faltas_cuat2 || alumno.faltas2, [Validators.min(0)]]
+    }, { updateOn: 'blur' });
   }
 
   toggleRow(index: number) {
@@ -66,12 +88,16 @@ export class GrillaMasivaComponent implements OnInit {
         next: (res) => {
           console.log('Planilla guardada', res);
           this.isSaving = false;
-          alert('Calificaciones guardadas exitosamente.');
+          this.hasUnsavedChanges = false;
+          localStorage.removeItem('calificaciones_borrador');
+          alert('Calificaciones guardadas exitosamente en la base de datos.');
         },
         error: (err) => {
           console.error('Error al guardar', err);
           this.isSaving = false;
           // Fallback UI para la demo, simulamos éxito si la API no está arriba
+          this.hasUnsavedChanges = false;
+          localStorage.removeItem('calificaciones_borrador');
           alert('[Modo Local] Simulación: Calificaciones guardadas.');
         }
       });

@@ -38,11 +38,15 @@ export class PreviewModalComponent {
     this.reportesService.descargarPdf(this.tipoReporte, this.idRelacionado).subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Reporte_${this.tipoReporte}_Oficial.pdf`;
-        a.click();
-        window.URL.revokeObjectURL(url);
+        // Abrir en ventana emergente según requerimiento del usuario
+        const popup = window.open(url, 'DocumentoOficial', 'width=800,height=1000,toolbar=no,scrollbars=yes,resizable=yes');
+        
+        if (!popup) {
+           alert('Por favor, permite las ventanas emergentes para ver el reporte PDF.');
+        }
+
+        // Limpiar URL después de un tiempo para no romper la ventana emergente si se revoca muy rápido
+        setTimeout(() => window.URL.revokeObjectURL(url), 10000);
         this.isGeneratingPdf = false;
       },
       error: (err) => {
